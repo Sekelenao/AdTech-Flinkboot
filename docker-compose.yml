@@ -1,0 +1,81 @@
+services:
+  zookeeper:
+    image: zookeeper:3.9.2
+    container_name: adtech-zookeeper
+    environment:
+      ZOO_MY_ID: 1
+
+  coordinator-server:
+    image: apache/fluss:1.0.0
+    container_name: adtech-fluss-coordinator
+    command: coordinatorServer
+    depends_on:
+      - zookeeper
+    environment:
+      FLUSS_PROPERTIES: |
+        zookeeper.address: zookeeper:2181
+        bind.listeners: INTERNAL://coordinator-server:0, CLIENT://coordinator-server:9123
+        advertised.listeners: CLIENT://localhost:9123
+        internal.listener.name: INTERNAL
+        remote.data.dir: /tmp/fluss/remote-data
+    ports:
+      - "9123:9123"
+
+  tablet-server:
+    image: apache/fluss:1.0.0
+    container_name: adtech-fluss-tablet
+    command: tabletServer
+    depends_on:
+      - coordinator-server
+    environment:
+      FLUSS_PROPERTIES: |
+        zookeeper.address: zookeeper:2181
+        bind.listeners: INTERNAL://tablet-server:0, CLIENT://tablet-server:9124
+        advertised.listeners: CLIENT://localhost:9124
+        internal.listener.name: INTERNAL
+        tablet-server.id: 1
+        data.dir: /tmp/fluss/data
+        remote.data.dir: /tmp/fluss/remote-data
+    ports:
+      - "9124:9124"
+
+  redpanda:
+    image: docker.redpanda.com/redpandadata/redpanda:latest
+    container_name: adtech-redpanda
+    command:
+      - redpanda start
+      - --mode dev-container
+      - --smp 1
+      - --memory 512M
+      - --kafka-addr internal://0.0.0.0:29092,external://0.0.0.0:9092
+      - --advertise-kafka-addr internal://redpanda:29092,external://localhost:9092
+    ports:
+      - "9092:9092"
+      - "9644:9644"
+
+  init-topics:
+    image: docker.redpanda.com/redpandadata/redpanda:latest
+    container_name: adtech-init-topics
+    depends_on:
+      - redpanda
+    entrypoint: [ '/bin/sh', '-c' ]
+    command: |
+      "
+      echo 'Waiting for Redpanda to be ready...'
+      while ! rpk cluster info --brokers redpanda:29092 > /dev/null 2>&1; do
+        sleep 0.5
+      done
+      echo 'Redpanda is ready. Creating topics...'
+      rpk topic create campaign_budgets ad_impressions ad_clicks conversions budget_alerts -p 3 -r 1 --brokers redpanda:29092
+      echo 'All topics created successfully!'
+      "
+
+  console:
+    image: docker.redpanda.com/redpandadata/console:latest
+    container_name: adtech-redpanda-console
+    depends_on:
+      - redpanda
+    environment:
+      KAFKA_BROKERS: redpanda:29092
+    ports:
+      - "8085:8080"

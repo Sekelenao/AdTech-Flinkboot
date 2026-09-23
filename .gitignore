@@ -1,0 +1,26 @@
+# Maven build artifacts
+target/
+**/target/
+
+# Private / local documentation & specs
+.private/
+
+# IDE & Editor files
+.idea/
+*.iml
+*.iws
+*.ipr
+.vscode/
+.classpath
+.project
+.settings/
+
+# Operating System files
+.DS_Store
+Thumbs.db
+
+# Logs and temporary files
+*.log
+*.tmp
+*.dump
+*.dumpstream

@@ -1,0 +1,64 @@
+job:
+  name: "adtech-budget-pacing-job"
+  environment:
+    execution:
+      runtime-mode: "STREAMING"
+      parallelism: 2
+      buffer-timeout: "PT0.05S"
+    checkpointing:
+      enabled: true
+      interval: "PT10S"
+      mode: "EXACTLY_ONCE"
+      timeout: "PT1M"
+    state-backend:
+      type: "ROCKSDB"
+      incremental: true
+    restart-strategy:
+      type: "FIXED_DELAY"
+      fixed-delay:
+        attempts: 3
+        delay: "PT5S"
+    local-web-ui:
+      enabled: true
+      port: 8081
+
+campaign-budget-source:
+  name: "campaign-budget-source"
+  bootstrap-servers:
+    - "localhost:9092"
+  group-id: "adtech-budget-campaigns-group"
+  topics:
+    - "campaign_budgets"
+  starting-offsets: "EARLIEST"
+
+impressions-source:
+  name: "ad-impressions-source"
+  bootstrap-servers:
+    - "localhost:9092"
+  group-id: "adtech-budget-impressions-group"
+  topics:
+    - "ad_impressions"
+  starting-offsets: "EARLIEST"
+
+clicks-source:
+  name: "ad-clicks-source"
+  bootstrap-servers:
+    - "localhost:9092"
+  group-id: "adtech-budget-clicks-group"
+  topics:
+    - "ad_clicks"
+  starting-offsets: "EARLIEST"
+
+alerts-sink:
+  name: "budget-alerts-sink"
+  bootstrap-servers:
+    - "localhost:9092"
+  topic: "budget_alerts"
+  delivery-guarantee: "AT_LEAST_ONCE"
+
+fluss-sink:
+  name: "campaign-live-budgets-sink"
+  bootstrap-servers:
+    - "localhost:9123"
+  database: "fluss"
+  table: "campaign_live_budgets"

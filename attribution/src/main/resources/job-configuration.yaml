@@ -1,0 +1,51 @@
+job:
+  name: "adtech-last-click-attribution-job"
+  environment:
+    execution:
+      runtime-mode: "STREAMING"
+      parallelism: 2
+      buffer-timeout: "PT0.05S"
+    checkpointing:
+      enabled: true
+      interval: "PT10S"
+      mode: "EXACTLY_ONCE"
+      timeout: "PT1M"
+    state-backend:
+      type: "ROCKSDB"
+      incremental: true
+    restart-strategy:
+      type: "FIXED_DELAY"
+      fixed-delay:
+        attempts: 3
+        delay: "PT5S"
+    local-web-ui:
+      enabled: true
+      port: 8082
+
+attribution:
+  window: "PT30M"
+
+clicks-source:
+  name: "ad-clicks-source"
+  bootstrap-servers:
+    - "localhost:9092"
+  group-id: "adtech-attribution-clicks-group"
+  topics:
+    - "ad_clicks"
+  starting-offsets: "EARLIEST"
+
+conversions-source:
+  name: "conversions-source"
+  bootstrap-servers:
+    - "localhost:9092"
+  group-id: "adtech-attribution-conversions-group"
+  topics:
+    - "conversions"
+  starting-offsets: "EARLIEST"
+
+attributed-conversions-sink:
+  name: "attributed-conversions-sink"
+  bootstrap-servers:
+    - "localhost:9092"
+  topic: "attributed_conversions"
+  delivery-guarantee: "AT_LEAST_ONCE"
