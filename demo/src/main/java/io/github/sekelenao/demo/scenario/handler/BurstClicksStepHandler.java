@@ -5,6 +5,7 @@ import io.github.sekelenao.adtech.model.util.Currencies;
 import io.github.sekelenao.demo.kafka.ClickPublisher;
 import io.github.sekelenao.demo.model.Action;
 import io.github.sekelenao.demo.model.ScenarioStep;
+import io.github.sekelenao.demo.util.Sleeps;
 import org.springframework.stereotype.Component;
 
 import java.time.Instant;
@@ -28,7 +29,6 @@ public class BurstClicksStepHandler implements StepHandler {
     @Override
     public void handle(ScenarioStep step) {
         Objects.requireNonNull(step);
-
         for (int i = 0; i < step.count(); i++) {
             AdClick click = new AdClick();
             click.timestamp = Instant.now().toEpochMilli();
@@ -38,16 +38,9 @@ public class BurstClicksStepHandler implements StepHandler {
             click.advertiserId = step.advertiserId();
             click.userId = step.userId();
             click.cost = Currencies.toMicros(step.costEur());
-
             clickPublisher.publish(click);
-
-            if (step.delayBetweenMs() > 0 && i < step.count() - 1) {
-                try {
-                    Thread.sleep(step.delayBetweenMs());
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                    break;
-                }
+            if (i < step.count() - 1) {
+                Sleeps.sleep(step.delayBetweenMs());
             }
         }
     }
