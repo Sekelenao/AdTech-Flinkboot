@@ -53,8 +53,8 @@ class CampaignStepHandlerTest {
             null,
             CampaignStatus.ACTIVE,
             0,
-            0,
-            500
+            0L,
+            500L
         );
 
         handler.handle(step);

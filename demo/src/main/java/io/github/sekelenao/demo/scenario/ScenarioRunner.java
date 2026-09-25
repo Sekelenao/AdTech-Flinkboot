@@ -42,7 +42,7 @@ public class ScenarioRunner {
                 throw new IllegalStateException("No handler registered for action: " + step.action());
             }
             handler.handle(step);
-            Sleeps.sleep(step.delayAfterMs());
+            step.delayAfterMs().ifPresent(Sleeps::sleep);
         }
         LOGGER.info("Finished execution of scenario '{}'", scenario.name());
     }

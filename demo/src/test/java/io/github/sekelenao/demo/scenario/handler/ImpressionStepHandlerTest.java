@@ -53,8 +53,8 @@ class ImpressionStepHandlerTest {
             null,
             null,
             0,
-            0,
-            300
+            0L,
+            300L
         );
 
         handler.handle(step);

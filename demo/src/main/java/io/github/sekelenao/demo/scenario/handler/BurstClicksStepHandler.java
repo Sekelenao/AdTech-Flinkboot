@@ -29,7 +29,8 @@ public class BurstClicksStepHandler implements StepHandler {
     @Override
     public void handle(ScenarioStep step) {
         Objects.requireNonNull(step);
-        for (int i = 0; i < step.count(); i++) {
+        var count = step.count().orElse(1);
+        for (int i = 0; i < count; i++) {
             AdClick click = new AdClick();
             click.timestamp = Instant.now().toEpochMilli();
             click.clickId = UUID.randomUUID().toString();
@@ -39,8 +40,8 @@ public class BurstClicksStepHandler implements StepHandler {
             click.userId = step.userId();
             click.cost = Currencies.toMicros(step.costEur());
             clickPublisher.publish(click);
-            if (i < step.count() - 1) {
-                Sleeps.sleep(step.delayBetweenMs());
+            if (i < count - 1) {
+                step.delayBetweenMs().ifPresent(Sleeps::sleep);
             }
         }
     }

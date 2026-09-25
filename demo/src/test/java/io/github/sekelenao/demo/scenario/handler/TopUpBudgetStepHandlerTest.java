@@ -53,8 +53,8 @@ class TopUpBudgetStepHandlerTest {
             null,
             null,
             0,
-            0,
-            1000
+            0L,
+            1000L
         );
 
         handler.handle(step);

@@ -53,8 +53,8 @@ class ConversionStepHandlerTest {
             BigDecimal.valueOf(120),
             null,
             0,
-            0,
-            1500
+            0L,
+            1500L
         );
 
         handler.handle(step);

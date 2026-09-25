@@ -53,8 +53,8 @@ class ClickStepHandlerTest {
             null,
             null,
             0,
-            0,
-            1200
+            0L,
+            1200L
         );
 
         handler.handle(step);

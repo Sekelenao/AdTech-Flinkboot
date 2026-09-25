@@ -18,6 +18,6 @@ public class SleepStepHandler implements StepHandler {
     @Override
     public void handle(ScenarioStep step) {
         Objects.requireNonNull(step);
-        Sleeps.sleep(step.delayBetweenMs());
+        step.delayBetweenMs().ifPresent(Sleeps::sleep);
     }
 }

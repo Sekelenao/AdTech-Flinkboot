@@ -39,8 +39,8 @@ class SleepStepHandlerTest {
             null,
             null,
             0,
-            10,
-            0
+            10L,
+            0L
         );
 
         handler.handle(step);

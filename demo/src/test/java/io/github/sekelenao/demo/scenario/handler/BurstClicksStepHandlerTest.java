@@ -54,8 +54,8 @@ class BurstClicksStepHandlerTest {
             null,
             null,
             3,
-            0,
-            2000
+            0L,
+            2000L
         );
 
         handler.handle(step);
