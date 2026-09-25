@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.Objects;
@@ -31,6 +32,11 @@ public class ScenarioController {
         Objects.requireNonNull(model);
         model.addAttribute("scenarios", scenarioService.listScenarios());
         return "index";
+    }
+
+    @PostMapping("/scenarios/run")
+    public String runScenarioFromForm(@RequestParam("name") String name, RedirectAttributes redirectAttributes) {
+        return runScenario(name, redirectAttributes);
     }
 
     @PostMapping("/scenarios/{name}/run")

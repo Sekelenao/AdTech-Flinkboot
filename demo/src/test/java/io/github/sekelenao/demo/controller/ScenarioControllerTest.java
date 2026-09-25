@@ -55,6 +55,17 @@ class ScenarioControllerTest {
     }
 
     @Test
+    @DisplayName("Should run scenario from form param and redirect with success flash message")
+    void shouldRunScenarioFromFormAndRedirectWithSuccessMessage() throws Exception {
+        mockMvc.perform(post("/scenarios/run").param("name", "showcase-demo"))
+            .andExpect(status().is3xxRedirection())
+            .andExpect(redirectedUrl("/"))
+            .andExpect(flash().attributeExists("successMessage"));
+
+        verify(scenarioService).runScenario("showcase-demo");
+    }
+
+    @Test
     @DisplayName("Should handle scenario execution error and redirect with error flash message")
     void shouldHandleRunScenarioErrorAndRedirectWithErrorMessage() throws Exception {
         doThrow(new RuntimeException("Kafka error")).when(scenarioService).runScenario("showcase-demo");

@@ -3,89 +3,387 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AdTech Stream Processing - Demo Scenario Injector</title>
+    <title>AdTech Operations - Real-Time Stream Processing Dashboard</title>
     <link rel="stylesheet" th:href="@{/css/style.css}" href="/css/style.css">
 </head>
 <body>
-    <div class="container">
-        <header>
-            <div class="header-title">
-                <h1>AdTech Stream Processing - Demo Platform</h1>
-                <p>Interactive data injection into Kafka/Redpanda for real-time Flink budget & attribution engines</p>
-                <div class="badges">
-                    <span class="badge">Apache Flink</span>
-                    <span class="badge">Redpanda / Kafka</span>
-                    <span class="badge">Spring Boot 4</span>
-                    <span class="badge">Virtual Threads</span>
-                    <span class="badge">Thymeleaf</span>
+    <!-- Top Navigation Header -->
+    <header class="top-header">
+        <div class="brand-wrapper">
+            <div class="brand-icon">&#x25c8;</div>
+            <div class="brand-title-group">
+                <span class="brand-title">AdTech Operations</span>
+                <span class="brand-divider">/</span>
+                <span class="brand-subtitle">Real-Time DSP & Stream Engine</span>
+            </div>
+            <span class="engine-status-badge">
+                <span class="pulse-dot"></span> Engine: Active
+            </span>
+        </div>
+
+        <!-- Top Right Scenario Selection & Execution Controls -->
+        <div class="header-actions">
+            <form th:action="@{/scenarios/run}" method="post" class="scenario-run-form">
+                <label for="scenarioSelect" class="scenario-label">Scenario:</label>
+                <select id="scenarioSelect" name="name" class="scenario-select" required>
+                    <option th:each="scenario : ${scenarios}"
+                            th:value="${scenario.name}"
+                            th:text="${scenario.name}">
+                        showcase-demo
+                    </option>
+                </select>
+                <button type="submit" class="btn btn-primary" title="Inject and execute selected scenario">
+                    &#x25b6; Run
+                </button>
+                <button type="submit" formaction="/scenarios/reload" class="btn btn-secondary" title="Reload scenarios from disk">
+                    &#x21bb; Reload
+                </button>
+            </form>
+        </div>
+    </header>
+
+    <!-- Sub-Navigation Tabs Bar -->
+    <nav class="subnav-bar">
+        <a class="subnav-tab active">Overview</a>
+        <a class="subnav-tab">Campaigns & Budgets</a>
+        <a class="subnav-tab">Attribution Engine</a>
+        <a class="subnav-tab">Stream Topics</a>
+    </nav>
+
+    <!-- Main Dashboard Container -->
+    <main class="dashboard-container">
+        <!-- Flash Alert Messages -->
+        <div th:if="${successMessage}" class="alert-box alert-box-success">
+            <span>&#x2714;</span>
+            <span th:text="${successMessage}">Scenario executed successfully!</span>
+        </div>
+        <div th:if="${errorMessage}" class="alert-box alert-box-danger">
+            <span>&#x2716;</span>
+            <span th:text="${errorMessage}">Scenario execution failed!</span>
+        </div>
+
+        <!-- Row 1: AdTech KPI Metric Tiles -->
+        <section class="kpi-grid">
+            <div class="kpi-card">
+                <div class="kpi-title">
+                    <span>Live Ad Spend</span>
+                    <span class="tag tag-blue">Daily</span>
+                </div>
+                <div class="kpi-value">&euro;193.40</div>
+                <div class="progress-bar">
+                    <div class="progress-bar-fill" style="width: 77.3%;"></div>
+                </div>
+                <div class="kpi-subtext">
+                    <span>Cap: &euro;250.00</span> &bull; <span>77.3% burned</span>
                 </div>
             </div>
-            <div>
-                <form th:action="@{/scenarios/reload}" method="post">
-                    <button type="submit" class="btn btn-secondary">
-                        &#x21bb; Reload Scenarios Cache
-                    </button>
-                </form>
-            </div>
-        </header>
 
-        <div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}"></div>
-        <div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
-
-        <main class="scenarios-grid">
-            <article class="scenario-card" th:each="scenario : ${scenarios}">
-                <div class="scenario-header">
-                    <div class="scenario-meta">
-                        <h2 th:text="${scenario.name}">Scenario Name</h2>
-                        <p th:text="${scenario.description}">Scenario Description</p>
-                    </div>
-                    <div>
-                        <form th:action="@{/scenarios/{name}/run(name=${scenario.name})}" method="post">
-                            <button type="submit" class="btn btn-primary">
-                                &#x25b6; Run Scenario
-                            </button>
-                        </form>
-                    </div>
+            <div class="kpi-card success">
+                <div class="kpi-title">
+                    <span>Total Impressions</span>
+                    <span class="kpi-trend-badge">+14.2%</span>
                 </div>
+                <div class="kpi-value">18,450</div>
+                <div class="kpi-subtext">
+                    <span>Avg eCPM: &euro;2.35</span> &bull; <span>Fill: 99.8%</span>
+                </div>
+            </div>
 
-                <div class="scenario-steps">
-                    <h3>Execution Steps (<span th:text="${#lists.size(scenario.steps)}">0</span>)</h3>
-                    <table class="steps-table">
+            <div class="kpi-card cyan">
+                <div class="kpi-title">
+                    <span>Clicks &amp; Engagement</span>
+                    <span class="tag tag-green">Live Stream</span>
+                </div>
+                <div class="kpi-value">924</div>
+                <div class="kpi-subtext">
+                    <span>CTR: 5.01%</span> &bull; <span>Avg CPC: &euro;0.21</span>
+                </div>
+            </div>
+
+            <div class="kpi-card purple">
+                <div class="kpi-title">
+                    <span>Attributed Conversions</span>
+                    <span class="tag tag-purple">Last-Click</span>
+                </div>
+                <div class="kpi-value">52</div>
+                <div class="kpi-subtext">
+                    <span>Conv Rate: 5.63%</span> &bull; <span>1h Lookback</span>
+                </div>
+            </div>
+
+            <div class="kpi-card success">
+                <div class="kpi-title">
+                    <span>Attributed Revenue</span>
+                    <span class="kpi-trend-badge">ROAS 23.7x</span>
+                </div>
+                <div class="kpi-value">&euro;4,580.00</div>
+                <div class="kpi-subtext">
+                    <span>Net Margin: +&euro;4,386.60</span>
+                </div>
+            </div>
+
+            <div class="kpi-card">
+                <div class="kpi-title">
+                    <span>Stream SLA Latency</span>
+                    <span class="tag tag-green">Healthy</span>
+                </div>
+                <div class="kpi-value">&lt; 3.8 ms</div>
+                <div class="kpi-subtext">
+                    <span>Checkpoints: 100% OK</span> &bull; <span>Backpressure: 0%</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Row 2: Live Advertisers & Real-time Budget Monitoring -->
+        <section class="card">
+            <div class="card-header">
+                <div class="card-title">
+                    <span>Active Advertisers &amp; Real-Time Budget Monitoring</span>
+                    <span class="tag tag-blue">Keyed &amp; Broadcast State</span>
+                </div>
+                <div class="card-subtitle">
+                    Synchronized across Kafka &amp; Stream Processing State
+                </div>
+            </div>
+            <div class="card-body" style="padding: 0;">
+                <div class="table-responsive">
+                    <table class="adtech-table">
                         <thead>
                             <tr>
-                                <th style="width: 40px;">#</th>
-                                <th style="width: 140px;">Action</th>
-                                <th>Description</th>
-                                <th>Details / Parameters</th>
-                                <th style="width: 100px; text-align: right;">Post Delay</th>
+                                <th>Advertiser</th>
+                                <th>Campaign ID</th>
+                                <th>Status</th>
+                                <th style="text-align: right;">Allocated</th>
+                                <th style="text-align: right;">Spent</th>
+                                <th style="text-align: right;">Remaining</th>
+                                <th style="width: 140px;">Burn Rate</th>
+                                <th style="text-align: right;">Impressions</th>
+                                <th style="text-align: right;">Clicks</th>
+                                <th style="text-align: right;">Conv.</th>
+                                <th style="text-align: right;">Attributed Rev.</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr th:each="step, iterStat : ${scenario.steps}">
-                                <td th:text="${iterStat.count}">1</td>
+                            <tr>
                                 <td>
-                                    <span th:class="'action-tag action-' + ${step.action}" th:text="${step.action}">ACTION</span>
+                                    <div class="advertiser-pill">
+                                        <span class="advertiser-avatar avatar-google">G</span>
+                                        <span>Google</span>
+                                    </div>
                                 </td>
-                                <td th:text="${step.description}">Description</td>
+                                <td><code>cmp-google-pixel9</code></td>
                                 <td>
-                                    <span th:if="${step.advertiserName}" class="param-chip" th:text="'Advertiser: ' + ${step.advertiserName}"></span>
-                                    <span th:if="${step.campaignId}" class="param-chip" th:text="'Campaign: ' + ${step.campaignId}"></span>
-                                    <span th:if="${step.userId}" class="param-chip" th:text="'User: ' + ${step.userId}"></span>
-                                    <span th:if="${step.allocatedBudgetEur}" class="param-chip" th:text="'Budget: ' + ${step.allocatedBudgetEur} + ' EUR'"></span>
-                                    <span th:if="${step.newAllocatedBudgetEur}" class="param-chip" th:text="'New Budget: ' + ${step.newAllocatedBudgetEur} + ' EUR'"></span>
-                                    <span th:if="${step.costEur}" class="param-chip" th:text="'Cost: ' + ${step.costEur} + ' EUR'"></span>
-                                    <span th:if="${step.orderAmountEur}" class="param-chip" th:text="'Order: ' + ${step.orderAmountEur} + ' EUR'"></span>
-                                    <span th:if="${step.count().isPresent()}" class="param-chip" th:text="'Count: ' + ${step.count().asInt}"></span>
-                                    <span th:if="${step.delayBetweenMs().isPresent()}" class="param-chip" th:text="'Interval: ' + ${step.delayBetweenMs().asLong} + 'ms'"></span>
-                                    <span th:if="${step.status}" class="param-chip" th:text="'Status: ' + ${step.status}"></span>
+                                    <span class="tag tag-green">
+                                        <span class="status-dot green"></span> ACTIVE
+                                    </span>
                                 </td>
-                                <td style="text-align: right; color: var(--text-secondary);" th:text="${step.delayAfterMs().isPresent() ? step.delayAfterMs().asLong + 'ms' : '-'}">-</td>
+                                <td style="text-align: right; font-weight: 600;">&euro;100.00</td>
+                                <td style="text-align: right;">&euro;38.40</td>
+                                <td style="text-align: right; color: var(--success); font-weight: 600;">&euro;61.60</td>
+                                <td>
+                                    <div class="progress-bar">
+                                        <div class="progress-bar-fill success" style="width: 38.4%;"></div>
+                                    </div>
+                                    <span style="font-size: 11px; color: var(--text-secondary);">38.4%</span>
+                                </td>
+                                <td style="text-align: right;">9,200</td>
+                                <td style="text-align: right;">460</td>
+                                <td style="text-align: right;">28</td>
+                                <td style="text-align: right; font-weight: 600; color: #389e0d;">&euro;2,450.00</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="advertiser-pill">
+                                        <span class="advertiser-avatar avatar-binance">B</span>
+                                        <span>Binance</span>
+                                    </div>
+                                </td>
+                                <td><code>cmp-binance-earn</code></td>
+                                <td>
+                                    <span class="tag tag-default">
+                                        <span class="status-dot gray"></span> PAUSED
+                                    </span>
+                                </td>
+                                <td style="text-align: right; font-weight: 600;">&euro;50.00</td>
+                                <td style="text-align: right;">&euro;0.00</td>
+                                <td style="text-align: right; font-weight: 600;">&euro;50.00</td>
+                                <td>
+                                    <div class="progress-bar">
+                                        <div class="progress-bar-fill" style="width: 0%;"></div>
+                                    </div>
+                                    <span style="font-size: 11px; color: var(--text-secondary);">0.0%</span>
+                                </td>
+                                <td style="text-align: right;">0</td>
+                                <td style="text-align: right;">0</td>
+                                <td style="text-align: right;">0</td>
+                                <td style="text-align: right;">&euro;0.00</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="advertiser-pill">
+                                        <span class="advertiser-avatar avatar-uber">U</span>
+                                        <span>Uber</span>
+                                    </div>
+                                </td>
+                                <td><code>cmp-uber-rides</code></td>
+                                <td>
+                                    <span class="tag tag-red">
+                                        <span class="status-dot red"></span> BUDGET CAPPED
+                                    </span>
+                                </td>
+                                <td style="text-align: right; font-weight: 600;">&euro;5.00</td>
+                                <td style="text-align: right; color: var(--danger); font-weight: 600;">&euro;5.00</td>
+                                <td style="text-align: right; font-weight: 600;">&euro;0.00</td>
+                                <td>
+                                    <div class="progress-bar">
+                                        <div class="progress-bar-fill danger" style="width: 100%;"></div>
+                                    </div>
+                                    <span style="font-size: 11px; color: var(--danger); font-weight: 600;">100% (Capped)</span>
+                                </td>
+                                <td style="text-align: right;">1,250</td>
+                                <td style="text-align: right;">62</td>
+                                <td style="text-align: right;">2</td>
+                                <td style="text-align: right; font-weight: 600; color: #389e0d;">&euro;140.00</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="advertiser-pill">
+                                        <span class="advertiser-avatar avatar-tradingview">T</span>
+                                        <span>TradingView</span>
+                                    </div>
+                                </td>
+                                <td><code>cmp-tv-charts</code></td>
+                                <td>
+                                    <span class="tag tag-green">
+                                        <span class="status-dot green"></span> ACTIVE
+                                    </span>
+                                </td>
+                                <td style="text-align: right; font-weight: 600;">&euro;30.00</td>
+                                <td style="text-align: right;">&euro;12.80</td>
+                                <td style="text-align: right; color: var(--success); font-weight: 600;">&euro;17.20</td>
+                                <td>
+                                    <div class="progress-bar">
+                                        <div class="progress-bar-fill success" style="width: 42.7%;"></div>
+                                    </div>
+                                    <span style="font-size: 11px; color: var(--text-secondary);">42.7%</span>
+                                </td>
+                                <td style="text-align: right;">8,000</td>
+                                <td style="text-align: right;">402</td>
+                                <td style="text-align: right;">22</td>
+                                <td style="text-align: right; font-weight: 600; color: #389e0d;">&euro;1,990.00</td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
+            </div>
+        </section>
+
+        <!-- Row 3: 2-Column Section (Stream Processing Jobs & Scenario Catalog) -->
+        <section class="grid-2-col">
+            <!-- Left: Real-Time Stream Engine Status -->
+            <article class="card">
+                <div class="card-header">
+                    <div class="card-title">
+                        <span>Stream Engine Pipelines</span>
+                        <span class="tag tag-green">2 Running</span>
+                    </div>
+                    <div class="card-subtitle">Exactly-Once Semantics</div>
+                </div>
+                <div class="card-body">
+                    <div class="job-item">
+                        <div class="job-header">
+                            <span class="job-name">
+                                <span class="status-dot green"></span> adtech-budget-capping-job
+                            </span>
+                            <span class="tag tag-green">RUNNING</span>
+                        </div>
+                        <div class="job-stats">
+                            <span>Parallelism: <strong>4</strong></span>
+                            <span>State: <strong>Broadcast &amp; Keyed</strong></span>
+                            <span>Latency: <strong>2.1 ms</strong></span>
+                        </div>
+                        <div class="job-pipeline">
+                            Topics: adtech.campaigns &amp; adtech.clicks &rarr; CampaignBudgetBroadcastProcessFunction &rarr; adtech.budget-alerts
+                        </div>
+                    </div>
+
+                    <div class="job-item">
+                        <div class="job-header">
+                            <span class="job-name">
+                                <span class="status-dot green"></span> adtech-attribution-job
+                            </span>
+                            <span class="tag tag-green">RUNNING</span>
+                        </div>
+                        <div class="job-stats">
+                            <span>Parallelism: <strong>4</strong></span>
+                            <span>Window: <strong>1h Lookback</strong></span>
+                            <span>Latency: <strong>1.8 ms</strong></span>
+                        </div>
+                        <div class="job-pipeline">
+                            Topics: adtech.clicks &amp; adtech.orders &rarr; LastClickAttributionFunction &rarr; adtech.attributed-conversions
+                        </div>
+                    </div>
+                </div>
             </article>
-        </main>
-    </div>
+
+            <!-- Right: Scenario Catalog & Step Inspector -->
+            <article class="card">
+                <div class="card-header">
+                    <div class="card-title">
+                        <span>Scenario Catalog</span>
+                        <span class="tag tag-blue" th:text="${#lists.size(scenarios)} + ' Available'">3 Available</span>
+                    </div>
+                    <div class="card-subtitle">Click to inspect injected steps</div>
+                </div>
+                <div class="card-body">
+                    <div class="scenario-details-list">
+                        <details class="scenario-summary-card" th:each="scenario : ${scenarios}">
+                            <summary>
+                                <span style="display: flex; align-items: center; gap: 8px;">
+                                    <strong th:text="${scenario.name}">showcase-demo</strong>
+                                    <span class="tag tag-default" th:text="${#lists.size(scenario.steps)} + ' steps'">12 steps</span>
+                                </span>
+                                <form th:action="@{/scenarios/{name}/run(name=${scenario.name})}" method="post" style="display: inline;">
+                                    <button type="submit" class="btn btn-primary" style="height: 26px; padding: 2px 10px; font-size: 12px;">
+                                        &#x25b6; Run This
+                                    </button>
+                                </form>
+                            </summary>
+                            <p style="font-size: 12px; color: var(--text-secondary); margin-top: 8px;" th:text="${scenario.description}">
+                                Scenario description
+                            </p>
+                            <div class="scenario-steps-compact">
+                                <span th:each="step : ${scenario.steps}" class="step-chip">
+                                    <strong th:text="${step.action}">ACTION</strong>:
+                                    <span th:text="${step.description}">Description</span>
+                                </span>
+                            </div>
+                        </details>
+                    </div>
+                </div>
+            </article>
+        </section>
+
+        <!-- Row 4: Stream Event Topics Bar -->
+        <section class="card">
+            <div class="card-header">
+                <div class="card-title">
+                    <span>Kafka / Redpanda Real-Time Topics</span>
+                </div>
+                <div class="card-subtitle">All stream injections propagate to these partitioned topics</div>
+            </div>
+            <div class="card-body">
+                <div class="topics-bar">
+                    <span class="topic-chip"><span class="topic-icon"></span> adtech.campaigns</span>
+                    <span class="topic-chip"><span class="topic-icon"></span> adtech.impressions</span>
+                    <span class="topic-chip"><span class="topic-icon"></span> adtech.clicks</span>
+                    <span class="topic-chip"><span class="topic-icon"></span> adtech.conversions</span>
+                    <span class="topic-chip"><span class="topic-icon"></span> adtech.live-budget</span>
+                    <span class="topic-chip"><span class="topic-icon"></span> adtech.budget-alerts</span>
+                    <span class="topic-chip"><span class="topic-icon"></span> adtech.attributed-conversions</span>
+                </div>
+            </div>
+        </section>
+    </main>
 </body>
 </html>
