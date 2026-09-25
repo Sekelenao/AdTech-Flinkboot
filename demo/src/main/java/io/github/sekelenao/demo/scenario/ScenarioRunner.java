@@ -32,22 +32,19 @@ public class ScenarioRunner {
 
     public void run(Scenario scenario) {
         Objects.requireNonNull(scenario);
-        LOGGER.info("Starting execution of scenario '{}' ({} steps)", scenario.name(), scenario.steps().size());
-        for (int i = 0; i < scenario.steps().size(); i++) {
+        var stepsAmount = scenario.steps().size();
+        LOGGER.info("Starting execution of scenario '{}' ({} steps)", scenario.name(), stepsAmount);
+        for (int i = 0; i < stepsAmount; i++) {
             var step = scenario.steps().get(i);
-            executeStep(step, i + 1, scenario.steps().size());
+            LOGGER.info("[Step {}/{}] Executing {} - {}", i + 1, stepsAmount, step.action(), step.description());
+            var handler = handlers.get(step.action());
+            if(handler == null){
+                throw new IllegalStateException("No handler registered for action: " + step.action());
+            }
+            handler.handle(step);
+            Sleeps.sleep(step.delayAfterMs());
         }
         LOGGER.info("Finished execution of scenario '{}'", scenario.name());
     }
 
-    private void executeStep(ScenarioStep step, int stepNumber, int totalSteps) {
-        Objects.requireNonNull(step);
-        LOGGER.info("[Step {}/{}] Executing {} - {}", stepNumber, totalSteps, step.action(), step.description());
-        var handler = handlers.get(step.action());
-        if(handler == null){
-            throw new IllegalStateException("No handler registered for action: " + step.action());
-        }
-        handler.handle(step);
-        Sleeps.sleep(step.delayAfterMs());
-    }
 }
