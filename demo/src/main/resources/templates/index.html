@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AdTech Operations - Real-Time Stream Processing Dashboard</title>
+    <title>AdTech Operations - Real-Time Budget Monitoring</title>
     <link rel="stylesheet" th:href="@{/css/style.css}" href="/css/style.css">
 </head>
 <body>
@@ -14,7 +14,7 @@
             <div class="brand-title-group">
                 <span class="brand-title">AdTech Operations</span>
                 <span class="brand-divider">/</span>
-                <span class="brand-subtitle">Real-Time DSP & Stream Engine</span>
+                <span class="brand-subtitle">Real-Time DSP &amp; Stream Engine</span>
             </div>
             <span class="engine-status-badge">
                 <span class="pulse-dot"></span> Engine: Active
@@ -35,20 +35,9 @@
                 <button type="submit" class="btn btn-primary" title="Inject and execute selected scenario">
                     &#x25b6; Run
                 </button>
-                <button type="submit" formaction="/scenarios/reload" class="btn btn-secondary" title="Reload scenarios from disk">
-                    &#x21bb; Reload
-                </button>
             </form>
         </div>
     </header>
-
-    <!-- Sub-Navigation Tabs Bar -->
-    <nav class="subnav-bar">
-        <a class="subnav-tab active">Overview</a>
-        <a class="subnav-tab">Campaigns & Budgets</a>
-        <a class="subnav-tab">Attribution Engine</a>
-        <a class="subnav-tab">Stream Topics</a>
-    </nav>
 
     <!-- Main Dashboard Container -->
     <main class="dashboard-container">
@@ -62,79 +51,7 @@
             <span th:text="${errorMessage}">Scenario execution failed!</span>
         </div>
 
-        <!-- Row 1: AdTech KPI Metric Tiles -->
-        <section class="kpi-grid">
-            <div class="kpi-card">
-                <div class="kpi-title">
-                    <span>Live Ad Spend</span>
-                    <span class="tag tag-blue">Daily</span>
-                </div>
-                <div class="kpi-value">&euro;193.40</div>
-                <div class="progress-bar">
-                    <div class="progress-bar-fill" style="width: 77.3%;"></div>
-                </div>
-                <div class="kpi-subtext">
-                    <span>Cap: &euro;250.00</span> &bull; <span>77.3% burned</span>
-                </div>
-            </div>
-
-            <div class="kpi-card success">
-                <div class="kpi-title">
-                    <span>Total Impressions</span>
-                    <span class="kpi-trend-badge">+14.2%</span>
-                </div>
-                <div class="kpi-value">18,450</div>
-                <div class="kpi-subtext">
-                    <span>Avg eCPM: &euro;2.35</span> &bull; <span>Fill: 99.8%</span>
-                </div>
-            </div>
-
-            <div class="kpi-card cyan">
-                <div class="kpi-title">
-                    <span>Clicks &amp; Engagement</span>
-                    <span class="tag tag-green">Live Stream</span>
-                </div>
-                <div class="kpi-value">924</div>
-                <div class="kpi-subtext">
-                    <span>CTR: 5.01%</span> &bull; <span>Avg CPC: &euro;0.21</span>
-                </div>
-            </div>
-
-            <div class="kpi-card purple">
-                <div class="kpi-title">
-                    <span>Attributed Conversions</span>
-                    <span class="tag tag-purple">Last-Click</span>
-                </div>
-                <div class="kpi-value">52</div>
-                <div class="kpi-subtext">
-                    <span>Conv Rate: 5.63%</span> &bull; <span>1h Lookback</span>
-                </div>
-            </div>
-
-            <div class="kpi-card success">
-                <div class="kpi-title">
-                    <span>Attributed Revenue</span>
-                    <span class="kpi-trend-badge">ROAS 23.7x</span>
-                </div>
-                <div class="kpi-value">&euro;4,580.00</div>
-                <div class="kpi-subtext">
-                    <span>Net Margin: +&euro;4,386.60</span>
-                </div>
-            </div>
-
-            <div class="kpi-card">
-                <div class="kpi-title">
-                    <span>Stream SLA Latency</span>
-                    <span class="tag tag-green">Healthy</span>
-                </div>
-                <div class="kpi-value">&lt; 3.8 ms</div>
-                <div class="kpi-subtext">
-                    <span>Checkpoints: 100% OK</span> &bull; <span>Backpressure: 0%</span>
-                </div>
-            </div>
-        </section>
-
-        <!-- Row 2: Live Advertisers & Real-time Budget Monitoring -->
+        <!-- Active Advertisers & Real-time Budget Monitoring -->
         <section class="card">
             <div class="card-header">
                 <div class="card-title">
@@ -274,113 +191,6 @@
                             </tr>
                         </tbody>
                     </table>
-                </div>
-            </div>
-        </section>
-
-        <!-- Row 3: 2-Column Section (Stream Processing Jobs & Scenario Catalog) -->
-        <section class="grid-2-col">
-            <!-- Left: Real-Time Stream Engine Status -->
-            <article class="card">
-                <div class="card-header">
-                    <div class="card-title">
-                        <span>Stream Engine Pipelines</span>
-                        <span class="tag tag-green">2 Running</span>
-                    </div>
-                    <div class="card-subtitle">Exactly-Once Semantics</div>
-                </div>
-                <div class="card-body">
-                    <div class="job-item">
-                        <div class="job-header">
-                            <span class="job-name">
-                                <span class="status-dot green"></span> adtech-budget-capping-job
-                            </span>
-                            <span class="tag tag-green">RUNNING</span>
-                        </div>
-                        <div class="job-stats">
-                            <span>Parallelism: <strong>4</strong></span>
-                            <span>State: <strong>Broadcast &amp; Keyed</strong></span>
-                            <span>Latency: <strong>2.1 ms</strong></span>
-                        </div>
-                        <div class="job-pipeline">
-                            Topics: adtech.campaigns &amp; adtech.clicks &rarr; CampaignBudgetBroadcastProcessFunction &rarr; adtech.budget-alerts
-                        </div>
-                    </div>
-
-                    <div class="job-item">
-                        <div class="job-header">
-                            <span class="job-name">
-                                <span class="status-dot green"></span> adtech-attribution-job
-                            </span>
-                            <span class="tag tag-green">RUNNING</span>
-                        </div>
-                        <div class="job-stats">
-                            <span>Parallelism: <strong>4</strong></span>
-                            <span>Window: <strong>1h Lookback</strong></span>
-                            <span>Latency: <strong>1.8 ms</strong></span>
-                        </div>
-                        <div class="job-pipeline">
-                            Topics: adtech.clicks &amp; adtech.orders &rarr; LastClickAttributionFunction &rarr; adtech.attributed-conversions
-                        </div>
-                    </div>
-                </div>
-            </article>
-
-            <!-- Right: Scenario Catalog & Step Inspector -->
-            <article class="card">
-                <div class="card-header">
-                    <div class="card-title">
-                        <span>Scenario Catalog</span>
-                        <span class="tag tag-blue" th:text="${#lists.size(scenarios)} + ' Available'">3 Available</span>
-                    </div>
-                    <div class="card-subtitle">Click to inspect injected steps</div>
-                </div>
-                <div class="card-body">
-                    <div class="scenario-details-list">
-                        <details class="scenario-summary-card" th:each="scenario : ${scenarios}">
-                            <summary>
-                                <span style="display: flex; align-items: center; gap: 8px;">
-                                    <strong th:text="${scenario.name}">showcase-demo</strong>
-                                    <span class="tag tag-default" th:text="${#lists.size(scenario.steps)} + ' steps'">12 steps</span>
-                                </span>
-                                <form th:action="@{/scenarios/{name}/run(name=${scenario.name})}" method="post" style="display: inline;">
-                                    <button type="submit" class="btn btn-primary" style="height: 26px; padding: 2px 10px; font-size: 12px;">
-                                        &#x25b6; Run This
-                                    </button>
-                                </form>
-                            </summary>
-                            <p style="font-size: 12px; color: var(--text-secondary); margin-top: 8px;" th:text="${scenario.description}">
-                                Scenario description
-                            </p>
-                            <div class="scenario-steps-compact">
-                                <span th:each="step : ${scenario.steps}" class="step-chip">
-                                    <strong th:text="${step.action}">ACTION</strong>:
-                                    <span th:text="${step.description}">Description</span>
-                                </span>
-                            </div>
-                        </details>
-                    </div>
-                </div>
-            </article>
-        </section>
-
-        <!-- Row 4: Stream Event Topics Bar -->
-        <section class="card">
-            <div class="card-header">
-                <div class="card-title">
-                    <span>Kafka / Redpanda Real-Time Topics</span>
-                </div>
-                <div class="card-subtitle">All stream injections propagate to these partitioned topics</div>
-            </div>
-            <div class="card-body">
-                <div class="topics-bar">
-                    <span class="topic-chip"><span class="topic-icon"></span> adtech.campaigns</span>
-                    <span class="topic-chip"><span class="topic-icon"></span> adtech.impressions</span>
-                    <span class="topic-chip"><span class="topic-icon"></span> adtech.clicks</span>
-                    <span class="topic-chip"><span class="topic-icon"></span> adtech.conversions</span>
-                    <span class="topic-chip"><span class="topic-icon"></span> adtech.live-budget</span>
-                    <span class="topic-chip"><span class="topic-icon"></span> adtech.budget-alerts</span>
-                    <span class="topic-chip"><span class="topic-icon"></span> adtech.attributed-conversions</span>
                 </div>
             </div>
         </section>

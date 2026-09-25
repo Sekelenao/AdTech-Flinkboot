@@ -177,7 +177,7 @@ body {
 /* Buttons */
 .btn {
     height: 32px;
-    padding: 4px 14px;
+    padding: 4px 16px;
     font-size: 13px;
     font-weight: 500;
     border-radius: 4px;
@@ -200,48 +200,6 @@ body {
 .btn-primary:hover {
     background-color: var(--primary-hover);
     border-color: var(--primary-hover);
-}
-
-.btn-secondary {
-    background-color: #1f2d3d;
-    border-color: #434f5d;
-    color: rgba(255, 255, 255, 0.85);
-}
-
-.btn-secondary:hover {
-    background-color: #2b3d52;
-    color: #ffffff;
-}
-
-/* --------------------------------------------------------------------------
-   Sub-Navigation Bar (Tabs)
-   -------------------------------------------------------------------------- */
-.subnav-bar {
-    background-color: #ffffff;
-    border-bottom: 1px solid var(--border-color);
-    padding: 0 24px;
-    display: flex;
-    gap: 32px;
-}
-
-.subnav-tab {
-    padding: 12px 4px;
-    font-size: 14px;
-    font-weight: 500;
-    color: var(--text-secondary);
-    text-decoration: none;
-    border-bottom: 2px solid transparent;
-    transition: all 0.2s;
-    cursor: pointer;
-}
-
-.subnav-tab:hover {
-    color: var(--primary);
-}
-
-.subnav-tab.active {
-    color: var(--primary);
-    border-bottom-color: var(--primary);
 }
 
 /* --------------------------------------------------------------------------
@@ -292,7 +250,7 @@ body {
 }
 
 .card-header {
-    padding: 14px 20px;
+    padding: 16px 20px;
     border-bottom: 1px solid var(--border-color);
     display: flex;
     justify-content: space-between;
@@ -316,78 +274,6 @@ body {
 
 .card-body {
     padding: 20px;
-}
-
-/* --------------------------------------------------------------------------
-   KPI Metric Cards Grid
-   -------------------------------------------------------------------------- */
-.kpi-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
-    gap: 16px;
-}
-
-.kpi-card {
-    background: #ffffff;
-    border: 1px solid var(--border-color);
-    border-radius: 2px;
-    padding: 18px 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    position: relative;
-    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.02);
-}
-
-.kpi-card::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 3px;
-    background-color: var(--primary);
-}
-
-.kpi-card.success::before { background-color: var(--success); }
-.kpi-card.warning::before { background-color: var(--warning); }
-.kpi-card.purple::before { background-color: #722ed1; }
-.kpi-card.cyan::before { background-color: #13c2c2; }
-
-.kpi-title {
-    font-size: 13px;
-    color: var(--text-secondary);
-    font-weight: 500;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.kpi-value {
-    font-size: 26px;
-    font-weight: 700;
-    color: var(--text-primary);
-    letter-spacing: -0.5px;
-    line-height: 1.2;
-}
-
-.kpi-subtext {
-    font-size: 12px;
-    color: var(--text-secondary);
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    margin-top: 4px;
-}
-
-.kpi-trend-badge {
-    padding: 1px 6px;
-    border-radius: 2px;
-    font-size: 11px;
-    font-weight: 600;
-    background-color: #f6ffed;
-    color: #52c41a;
-    border: 1px solid #b7eb8f;
 }
 
 /* --------------------------------------------------------------------------
@@ -432,13 +318,13 @@ body {
     background-color: var(--table-header-bg);
     color: var(--text-primary);
     font-weight: 600;
-    padding: 12px 16px;
+    padding: 14px 16px;
     border-bottom: 1px solid var(--border-color);
     white-space: nowrap;
 }
 
 .adtech-table tbody td {
-    padding: 12px 16px;
+    padding: 14px 16px;
     border-bottom: 1px solid var(--border-color);
     vertical-align: middle;
 }
@@ -487,12 +373,6 @@ body {
     border-color: #91d5ff;
 }
 
-.tag-purple {
-    color: #531dab;
-    background: #f9f0ff;
-    border-color: #d3adf7;
-}
-
 .tag-default {
     color: var(--text-secondary);
     background: #fafafa;
@@ -536,150 +416,3 @@ body {
 .avatar-binance { background-color: #f3ba2f; color: #000000; }
 .avatar-uber { background-color: #000000; }
 .avatar-tradingview { background-color: #2962ff; }
-
-/* --------------------------------------------------------------------------
-   Grid Layouts
-   -------------------------------------------------------------------------- */
-.grid-2-col {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
-}
-
-@media (max-width: 1024px) {
-    .grid-2-col {
-        grid-template-columns: 1fr;
-    }
-}
-
-/* --------------------------------------------------------------------------
-   Streaming Pipeline / Engine Jobs List
-   -------------------------------------------------------------------------- */
-.job-item {
-    border: 1px solid var(--border-color);
-    border-radius: 2px;
-    padding: 14px 16px;
-    margin-bottom: 12px;
-    background-color: #ffffff;
-    transition: all 0.2s;
-}
-
-.job-item:last-child {
-    margin-bottom: 0;
-}
-
-.job-item:hover {
-    border-color: #91d5ff;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
-}
-
-.job-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 8px;
-}
-
-.job-name {
-    font-weight: 600;
-    font-size: 14px;
-    color: var(--primary);
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.job-stats {
-    display: flex;
-    gap: 16px;
-    font-size: 12px;
-    color: var(--text-secondary);
-}
-
-.job-pipeline {
-    font-family: SFMono-Regular, Consolas, "Liberation Mono", Menlo, monospace;
-    font-size: 11px;
-    background-color: #fafafa;
-    border: 1px solid #f0f0f0;
-    border-radius: 2px;
-    padding: 6px 10px;
-    color: #595959;
-    margin-top: 8px;
-    word-break: break-all;
-}
-
-/* --------------------------------------------------------------------------
-   Scenario Catalog & Details
-   -------------------------------------------------------------------------- */
-.scenario-details-list {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-}
-
-.scenario-summary-card {
-    border: 1px solid var(--border-color);
-    border-radius: 2px;
-    padding: 14px;
-    background-color: #ffffff;
-}
-
-.scenario-summary-card summary {
-    font-weight: 600;
-    font-size: 14px;
-    cursor: pointer;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    list-style: none;
-}
-
-.scenario-summary-card summary::-webkit-details-marker {
-    display: none;
-}
-
-.scenario-steps-compact {
-    margin-top: 12px;
-    border-top: 1px solid var(--border-color);
-    padding-top: 10px;
-}
-
-.step-chip {
-    display: inline-block;
-    padding: 2px 6px;
-    background-color: #f5f5f5;
-    border-radius: 2px;
-    font-size: 11px;
-    margin: 2px 4px 2px 0;
-    color: #595959;
-}
-
-/* --------------------------------------------------------------------------
-   Streaming Topics Bar
-   -------------------------------------------------------------------------- */
-.topics-bar {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    align-items: center;
-}
-
-.topic-chip {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    background-color: #fafafa;
-    border: 1px solid var(--border-dark);
-    padding: 4px 10px;
-    border-radius: 4px;
-    font-family: SFMono-Regular, Consolas, monospace;
-    font-size: 12px;
-    color: var(--text-primary);
-}
-
-.topic-icon {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background-color: var(--primary);
-}

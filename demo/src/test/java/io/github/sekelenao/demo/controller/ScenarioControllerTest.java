@@ -75,15 +75,4 @@ class ScenarioControllerTest {
             .andExpect(redirectedUrl("/"))
             .andExpect(flash().attributeExists("errorMessage"));
     }
-
-    @Test
-    @DisplayName("Should reload scenarios cache and redirect with success flash message")
-    void shouldReloadScenariosAndRedirectWithSuccessMessage() throws Exception {
-        mockMvc.perform(post("/scenarios/reload"))
-            .andExpect(status().is3xxRedirection())
-            .andExpect(redirectedUrl("/"))
-            .andExpect(flash().attributeExists("successMessage"));
-
-        verify(scenarioService).reloadScenarios();
-    }
 }

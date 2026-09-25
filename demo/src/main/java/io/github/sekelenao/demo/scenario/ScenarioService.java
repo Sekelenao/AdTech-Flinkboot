@@ -47,9 +47,4 @@ public class ScenarioService {
         LOGGER.info("Triggering execution of scenario '{}'", scenario.name());
         scenarioRunner.run(scenario);
     }
-
-    public void reloadScenarios() {
-        LOGGER.info("Evicting scenario cache and reloading");
-        scenarioResourceLoader.reload();
-    }
 }

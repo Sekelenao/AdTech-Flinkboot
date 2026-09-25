@@ -54,19 +54,4 @@ public class ScenarioController {
         }
         return "redirect:/";
     }
-
-    @PostMapping("/scenarios/reload")
-    public String reloadScenarios(RedirectAttributes redirectAttributes) {
-        Objects.requireNonNull(redirectAttributes);
-
-        try {
-            LOGGER.info("User requested scenario cache reload");
-            scenarioService.reloadScenarios();
-            redirectAttributes.addFlashAttribute("successMessage", "Scenarios cache reloaded successfully!");
-        } catch (Exception exception) {
-            LOGGER.error("Failed to reload scenarios cache", exception);
-            redirectAttributes.addFlashAttribute("errorMessage", "Failed to reload scenarios cache: " + exception.getMessage());
-        }
-        return "redirect:/";
-    }
 }

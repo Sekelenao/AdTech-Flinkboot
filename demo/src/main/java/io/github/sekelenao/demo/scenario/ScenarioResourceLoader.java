@@ -2,7 +2,6 @@ package io.github.sekelenao.demo.scenario;
 
 import io.github.sekelenao.demo.model.Scenario;
 import io.github.sekelenao.demo.properties.AdtechProperties;
-import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.core.io.support.ResourcePatternResolver;
 import org.springframework.stereotype.Component;
@@ -40,10 +39,4 @@ public class ScenarioResourceLoader {
         }
         return List.copyOf(scenarios);
     }
-
-    @CacheEvict(value = "scenarios", allEntries = true)
-    public void reload() {
-        // Evict the cache
-    }
-
 }

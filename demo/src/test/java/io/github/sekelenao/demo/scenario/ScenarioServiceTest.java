@@ -90,14 +90,6 @@ class ScenarioServiceTest {
     }
 
     @Test
-    @DisplayName("Should reload scenarios by evicting cache")
-    void shouldReloadScenarios() {
-        scenarioService.reloadScenarios();
-
-        verify(scenarioResourceLoader).reload();
-    }
-
-    @Test
     @DisplayName("Should wrap IOException in UncheckedIOException when retrieveAll fails")
     void shouldWrapIOExceptionInUncheckedIOException() throws IOException {
         when(scenarioResourceLoader.retrieveAll()).thenThrow(new IOException("Disk error"));
