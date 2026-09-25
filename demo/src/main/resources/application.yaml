@@ -11,6 +11,8 @@ spring:
         spring.json.add.type.headers: false
 
 adtech:
+  scenarios:
+    pattern: "classpath*:scenarios/*.json"
   kafka:
     topics:
       campaign:

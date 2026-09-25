@@ -1,4 +1,4 @@
-package io.github.sekelenao.demo.properties;
+package io.github.sekelenao.demo.properties.part;
 
 import jakarta.validation.constraints.NotBlank;
 
