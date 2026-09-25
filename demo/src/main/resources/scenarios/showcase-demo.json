@@ -1,0 +1,153 @@
+{
+  "name": "showcase-demo",
+  "description": "End-to-end multi-advertiser demonstration with Google, Binance, Uber, and TradingView showcasing budget monitoring, automated capping, and last-click attribution.",
+  "steps": [
+    {
+      "action": "CAMPAIGN",
+      "description": "Register Google Pixel 9 campaign with 100.00 EUR budget",
+      "campaignId": "cmp-google-pixel9",
+      "advertiserId": "adv-google",
+      "advertiserName": "Google",
+      "allocatedBudgetEur": 100.00,
+      "status": "ACTIVE",
+      "delayAfterMs": 500
+    },
+    {
+      "action": "CAMPAIGN",
+      "description": "Register Binance Earn campaign with 50.00 EUR budget in PAUSED status",
+      "campaignId": "cmp-binance-earn",
+      "advertiserId": "adv-binance",
+      "advertiserName": "Binance",
+      "allocatedBudgetEur": 50.00,
+      "status": "PAUSED",
+      "delayAfterMs": 500
+    },
+    {
+      "action": "CAMPAIGN",
+      "description": "Register Uber Rides campaign with low 5.00 EUR budget to trigger capping",
+      "campaignId": "cmp-uber-rides",
+      "advertiserId": "adv-uber",
+      "advertiserName": "Uber",
+      "allocatedBudgetEur": 5.00,
+      "status": "ACTIVE",
+      "delayAfterMs": 500
+    },
+    {
+      "action": "CAMPAIGN",
+      "description": "Register TradingView Pro campaign with 30.00 EUR budget",
+      "campaignId": "cmp-tv-charts",
+      "advertiserId": "adv-tradingview",
+      "advertiserName": "TradingView",
+      "allocatedBudgetEur": 30.00,
+      "status": "ACTIVE",
+      "delayAfterMs": 1000
+    },
+    {
+      "action": "IMPRESSION",
+      "description": "User Alice views TradingView display banner",
+      "campaignId": "cmp-tv-charts",
+      "advertiserId": "adv-tradingview",
+      "userId": "usr-alice",
+      "costEur": 0.05,
+      "delayAfterMs": 300
+    },
+    {
+      "action": "IMPRESSION",
+      "description": "User Alice views Google Pixel 9 search ad",
+      "campaignId": "cmp-google-pixel9",
+      "advertiserId": "adv-google",
+      "userId": "usr-alice",
+      "costEur": 0.08,
+      "delayAfterMs": 500
+    },
+    {
+      "action": "CLICK",
+      "description": "User Alice clicks Google Pixel 9 ad",
+      "campaignId": "cmp-google-pixel9",
+      "advertiserId": "adv-google",
+      "userId": "usr-alice",
+      "costEur": 0.75,
+      "delayAfterMs": 1200
+    },
+    {
+      "action": "CONVERSION",
+      "description": "User Alice completes Pixel 9 order for 120.00 EUR (attributing last click to Google)",
+      "advertiserId": "adv-google",
+      "userId": "usr-alice",
+      "orderAmountEur": 120.00,
+      "delayAfterMs": 1500
+    },
+    {
+      "action": "IMPRESSION",
+      "description": "User Bob views Uber Rides ad",
+      "campaignId": "cmp-uber-rides",
+      "advertiserId": "adv-uber",
+      "userId": "usr-bob",
+      "costEur": 0.10,
+      "delayAfterMs": 400
+    },
+    {
+      "action": "BURST_CLICKS",
+      "description": "Burst of 12 clicks (0.50 EUR each = 6.00 EUR) exceeding Uber 5.00 EUR budget",
+      "campaignId": "cmp-uber-rides",
+      "advertiserId": "adv-uber",
+      "userId": "usr-bob",
+      "costEur": 0.50,
+      "count": 12,
+      "delayBetweenMs": 100,
+      "delayAfterMs": 2000
+    },
+    {
+      "action": "TOP_UP_BUDGET",
+      "description": "Uber increases budget from 5.00 EUR to 25.00 EUR (un-capping campaign back to ACTIVE)",
+      "campaignId": "cmp-uber-rides",
+      "advertiserId": "adv-uber",
+      "newAllocatedBudgetEur": 25.00,
+      "delayAfterMs": 1000
+    },
+    {
+      "action": "CLICK",
+      "description": "User Bob clicks on un-capped Uber campaign",
+      "campaignId": "cmp-uber-rides",
+      "advertiserId": "adv-uber",
+      "userId": "usr-bob",
+      "costEur": 0.50,
+      "delayAfterMs": 800
+    },
+    {
+      "action": "CONVERSION",
+      "description": "User Bob books Uber ride for 34.50 EUR (attributing to Uber)",
+      "advertiserId": "adv-uber",
+      "userId": "usr-bob",
+      "orderAmountEur": 34.50,
+      "delayAfterMs": 1000
+    },
+    {
+      "action": "CAMPAIGN",
+      "description": "Resume Binance Earn campaign with 80.00 EUR budget in ACTIVE status",
+      "campaignId": "cmp-binance-earn",
+      "advertiserId": "adv-binance",
+      "advertiserName": "Binance",
+      "allocatedBudgetEur": 80.00,
+      "status": "ACTIVE",
+      "delayAfterMs": 500
+    },
+    {
+      "action": "CLICK",
+      "description": "User Charlie clicks Binance Earn banner",
+      "campaignId": "cmp-binance-earn",
+      "advertiserId": "adv-binance",
+      "userId": "usr-charlie",
+      "costEur": 0.90,
+      "delayAfterMs": 1200
+    },
+    {
+      "action": "CONVERSION",
+      "description": "User Charlie deposits 250.00 EUR on Binance (attributing to Binance)",
+      "advertiserId": "adv-binance",
+      "userId": "usr-charlie",
+      "orderAmountEur": 250.00,
+      "delayAfterMs": 1000
+    }
+  ]
+}

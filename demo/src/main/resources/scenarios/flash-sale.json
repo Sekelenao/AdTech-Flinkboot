@@ -1,0 +1,64 @@
+{
+  "name": "flash-sale",
+  "description": "High-velocity multi-advertiser flash sale with heavy concurrent click traffic across Google, Binance, Uber, and TradingView.",
+  "steps": [
+    {
+      "action": "CAMPAIGN",
+      "description": "Initialize Google Flash Deals campaign with 500.00 EUR budget",
+      "campaignId": "cmp-google-flash",
+      "advertiserId": "adv-google",
+      "advertiserName": "Google",
+      "allocatedBudgetEur": 500.00,
+      "status": "ACTIVE",
+      "delayAfterMs": 300
+    },
+    {
+      "action": "CAMPAIGN",
+      "description": "Initialize TradingView Black Friday campaign with 200.00 EUR budget",
+      "campaignId": "cmp-tv-sale",
+      "advertiserId": "adv-tradingview",
+      "advertiserName": "TradingView",
+      "allocatedBudgetEur": 200.00,
+      "status": "ACTIVE",
+      "delayAfterMs": 300
+    },
+    {
+      "action": "BURST_CLICKS",
+      "description": "Surge of 20 clicks on Google Flash Deals",
+      "campaignId": "cmp-google-flash",
+      "advertiserId": "adv-google",
+      "userId": "usr-flash-1",
+      "costEur": 0.60,
+      "count": 20,
+      "delayBetweenMs": 50,
+      "delayAfterMs": 500
+    },
+    {
+      "action": "CONVERSION",
+      "description": "Flash sale conversion for user flash-1 for 499.00 EUR",
+      "advertiserId": "adv-google",
+      "userId": "usr-flash-1",
+      "orderAmountEur": 499.00,
+      "delayAfterMs": 800
+    },
+    {
+      "action": "BURST_CLICKS",
+      "description": "Surge of 15 clicks on TradingView Black Friday",
+      "campaignId": "cmp-tv-sale",
+      "advertiserId": "adv-tradingview",
+      "userId": "usr-flash-2",
+      "costEur": 0.40,
+      "count": 15,
+      "delayBetweenMs": 50,
+      "delayAfterMs": 500
+    },
+    {
+      "action": "CONVERSION",
+      "description": "Annual subscription purchase on TradingView for 179.00 EUR",
+      "advertiserId": "adv-tradingview",
+      "userId": "usr-flash-2",
+      "orderAmountEur": 179.00,
+      "delayAfterMs": 500
+    }
+  ]
+}
