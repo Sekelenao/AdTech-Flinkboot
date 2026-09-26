@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+    <header th:fragment="header" class="top-header">
+        <div class="brand-wrapper">
+            <a th:href="@{/}" style="text-decoration: none; display: flex; align-items: center; gap: 12px;">
+                <div class="brand-icon">&#x25c8;</div>
+                <div class="brand-title-group">
+                    <span class="brand-title">Flinkboot ADS</span>
+                </div>
+            </a>
+        </div>
+
+        <div class="header-actions">
+            <form th:action="@{/scenarios/run}" method="post" class="scenario-run-form">
+                <label for="scenarioSelect" class="scenario-label">Scenario:</label>
+                <select id="scenarioSelect" name="name" class="scenario-select" required>
+                    <option th:each="scenario : ${scenarios}"
+                            th:value="${scenario.name}"
+                            th:text="${scenario.name}">
+                        showcase-demo
+                    </option>
+                </select>
+                <button type="submit" class="btn btn-primary" title="Inject and execute selected scenario">
+                    &#x25b6; Run
+                </button>
+            </form>
+        </div>
+    </header>
+</body>
+</html>

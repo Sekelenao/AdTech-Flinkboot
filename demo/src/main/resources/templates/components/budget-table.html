@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+    <section th:fragment="budgetTable" class="card">
+        <div class="card-header">
+            <div class="card-title">
+                <span th:text="${param.status != null ? param.status[0] + ' Campaigns' : 'Campaigns'}">Campaigns</span>
+            </div>
+        </div>
+        <div class="card-body" style="padding: 0;">
+            <div th:if="${campaigns == null or #lists.isEmpty(campaigns)}" class="empty-alert-state">
+                <div class="empty-alert-title">No Campaigns</div>
+                <p class="empty-alert-desc">
+                    No campaigns found with status <strong th:text="${param.status != null ? param.status[0] : ''}">STATUS</strong>.
+                </p>
+            </div>
+
+            <div th:if="${campaigns != null and not #lists.isEmpty(campaigns)}" class="table-responsive">
+                <table class="adtech-table">
+                    <thead>
+                        <tr>
+                            <th>Advertiser</th>
+                            <th>Campaign ID</th>
+                            <th>Status</th>
+                            <th style="text-align: right;">Allocated</th>
+                            <th style="text-align: right;">Spent</th>
+                            <th style="text-align: right;">Remaining</th>
+                            <th style="text-align: right;">Impressions</th>
+                            <th style="text-align: right;">Clicks</th>
+                            <th style="text-align: right;">Conv.</th>
+                            <th style="text-align: right;">Attributed Rev.</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="campaign : ${campaigns}">
+                            <td><code th:text="${campaign.advertiserId}">adv-1</code></td>
+                            <td><code th:text="${campaign.campaignId}">cmp-1</code></td>
+                            <td><span th:replace="~{components/status-badge :: statusBadge(${campaign.status})}"></span></td>
+                            <td style="text-align: right;" th:text="${campaign.allocatedBudget}">0</td>
+                            <td style="text-align: right;" th:text="${campaign.spentBudget}">0</td>
+                            <td style="text-align: right;" th:text="${campaign.remainingBudget}">0</td>
+                            <td style="text-align: right;" th:text="${campaign.impressionCount}">0</td>
+                            <td style="text-align: right;" th:text="${campaign.clickCount}">0</td>
+                            <td style="text-align: right;" th:text="${campaign.attributedConversionCount}">0</td>
+                            <td style="text-align: right;" th:text="${campaign.attributedRevenue}">0</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+</body>
+</html>

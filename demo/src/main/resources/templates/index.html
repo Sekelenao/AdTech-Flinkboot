@@ -3,193 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AdTech Operations - Real-Time Budget Monitoring</title>
+    <title>Flinkboot ADS</title>
     <link rel="stylesheet" th:href="@{/css/style.css}" href="/css/style.css">
 </head>
 <body>
-    <!-- Top Navigation Header -->
-    <header class="top-header">
-        <div class="brand-wrapper">
-            <div class="brand-icon">&#x25c8;</div>
-            <div class="brand-title-group">
-                <span class="brand-title">AdTech Operations</span>
-                <span class="brand-divider">/</span>
-                <span class="brand-subtitle">Real-Time DSP &amp; Stream Engine</span>
-            </div>
-            <span class="engine-status-badge">
-                <span class="pulse-dot"></span> Engine: Active
-            </span>
-        </div>
+    <header th:replace="~{components/header :: header}"></header>
+    <nav th:replace="~{components/sub-header :: subHeader}"></nav>
 
-        <!-- Top Right Scenario Selection & Execution Controls -->
-        <div class="header-actions">
-            <form th:action="@{/scenarios/run}" method="post" class="scenario-run-form">
-                <label for="scenarioSelect" class="scenario-label">Scenario:</label>
-                <select id="scenarioSelect" name="name" class="scenario-select" required>
-                    <option th:each="scenario : ${scenarios}"
-                            th:value="${scenario.name}"
-                            th:text="${scenario.name}">
-                        showcase-demo
-                    </option>
-                </select>
-                <button type="submit" class="btn btn-primary" title="Inject and execute selected scenario">
-                    &#x25b6; Run
-                </button>
-            </form>
-        </div>
-    </header>
-
-    <!-- Main Dashboard Container -->
     <main class="dashboard-container">
-        <!-- Flash Alert Messages -->
-        <div th:if="${successMessage}" class="alert-box alert-box-success">
-            <span>&#x2714;</span>
-            <span th:text="${successMessage}">Scenario executed successfully!</span>
-        </div>
-        <div th:if="${errorMessage}" class="alert-box alert-box-danger">
-            <span>&#x2716;</span>
-            <span th:text="${errorMessage}">Scenario execution failed!</span>
-        </div>
+        <div th:replace="~{components/notifications :: notifications}"></div>
 
-        <!-- Active Advertisers & Real-time Budget Monitoring -->
-        <section class="card">
-            <div class="card-header">
-                <div class="card-title">
-                    <span>Active Advertisers &amp; Real-Time Budget Monitoring</span>
-                </div>
-            </div>
-            <div class="card-body" style="padding: 0;">
-                <div class="table-responsive">
-                    <table class="adtech-table">
-                        <thead>
-                            <tr>
-                                <th>Advertiser</th>
-                                <th>Campaign ID</th>
-                                <th>Status</th>
-                                <th style="text-align: right;">Allocated</th>
-                                <th style="text-align: right;">Spent</th>
-                                <th style="text-align: right;">Remaining</th>
-                                <th style="width: 140px;">Burn Rate</th>
-                                <th style="text-align: right;">Impressions</th>
-                                <th style="text-align: right;">Clicks</th>
-                                <th style="text-align: right;">Conv.</th>
-                                <th style="text-align: right;">Attributed Rev.</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>
-                                    <div class="advertiser-pill">
-                                        <span class="advertiser-avatar avatar-google">G</span>
-                                        <span>Google</span>
-                                    </div>
-                                </td>
-                                <td><code>cmp-google-pixel9</code></td>
-                                <td>
-                                    <span class="tag tag-green">
-                                        <span class="status-dot green"></span> ACTIVE
-                                    </span>
-                                </td>
-                                <td style="text-align: right; font-weight: 600;">&euro;100.00</td>
-                                <td style="text-align: right;">&euro;38.40</td>
-                                <td style="text-align: right; color: var(--success); font-weight: 600;">&euro;61.60</td>
-                                <td>
-                                    <div class="progress-bar">
-                                        <div class="progress-bar-fill success" style="width: 38.4%;"></div>
-                                    </div>
-                                    <span style="font-size: 11px; color: var(--text-secondary);">38.4%</span>
-                                </td>
-                                <td style="text-align: right;">9,200</td>
-                                <td style="text-align: right;">460</td>
-                                <td style="text-align: right;">28</td>
-                                <td style="text-align: right; font-weight: 600; color: #389e0d;">&euro;2,450.00</td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div class="advertiser-pill">
-                                        <span class="advertiser-avatar avatar-binance">B</span>
-                                        <span>Binance</span>
-                                    </div>
-                                </td>
-                                <td><code>cmp-binance-earn</code></td>
-                                <td>
-                                    <span class="tag tag-default">
-                                        <span class="status-dot gray"></span> PAUSED
-                                    </span>
-                                </td>
-                                <td style="text-align: right; font-weight: 600;">&euro;50.00</td>
-                                <td style="text-align: right;">&euro;0.00</td>
-                                <td style="text-align: right; font-weight: 600;">&euro;50.00</td>
-                                <td>
-                                    <div class="progress-bar">
-                                        <div class="progress-bar-fill" style="width: 0%;"></div>
-                                    </div>
-                                    <span style="font-size: 11px; color: var(--text-secondary);">0.0%</span>
-                                </td>
-                                <td style="text-align: right;">0</td>
-                                <td style="text-align: right;">0</td>
-                                <td style="text-align: right;">0</td>
-                                <td style="text-align: right;">&euro;0.00</td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div class="advertiser-pill">
-                                        <span class="advertiser-avatar avatar-uber">U</span>
-                                        <span>Uber</span>
-                                    </div>
-                                </td>
-                                <td><code>cmp-uber-rides</code></td>
-                                <td>
-                                    <span class="tag tag-red">
-                                        <span class="status-dot red"></span> BUDGET CAPPED
-                                    </span>
-                                </td>
-                                <td style="text-align: right; font-weight: 600;">&euro;5.00</td>
-                                <td style="text-align: right; color: var(--danger); font-weight: 600;">&euro;5.00</td>
-                                <td style="text-align: right; font-weight: 600;">&euro;0.00</td>
-                                <td>
-                                    <div class="progress-bar">
-                                        <div class="progress-bar-fill danger" style="width: 100%;"></div>
-                                    </div>
-                                    <span style="font-size: 11px; color: var(--danger); font-weight: 600;">100% (Capped)</span>
-                                </td>
-                                <td style="text-align: right;">1,250</td>
-                                <td style="text-align: right;">62</td>
-                                <td style="text-align: right;">2</td>
-                                <td style="text-align: right; font-weight: 600; color: #389e0d;">&euro;140.00</td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div class="advertiser-pill">
-                                        <span class="advertiser-avatar avatar-tradingview">T</span>
-                                        <span>TradingView</span>
-                                    </div>
-                                </td>
-                                <td><code>cmp-tv-charts</code></td>
-                                <td>
-                                    <span class="tag tag-green">
-                                        <span class="status-dot green"></span> ACTIVE
-                                    </span>
-                                </td>
-                                <td style="text-align: right; font-weight: 600;">&euro;30.00</td>
-                                <td style="text-align: right;">&euro;12.80</td>
-                                <td style="text-align: right; color: var(--success); font-weight: 600;">&euro;17.20</td>
-                                <td>
-                                    <div class="progress-bar">
-                                        <div class="progress-bar-fill success" style="width: 42.7%;"></div>
-                                    </div>
-                                    <span style="font-size: 11px; color: var(--text-secondary);">42.7%</span>
-                                </td>
-                                <td style="text-align: right;">8,000</td>
-                                <td style="text-align: right;">402</td>
-                                <td style="text-align: right;">22</td>
-                                <td style="text-align: right; font-weight: 600; color: #389e0d;">&euro;1,990.00</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </section>
+        <!-- ALERTS Menu (default view): Search bar + Alerts list -->
+        <th:block th:if="${param.status == null or param.status[0] == 'ALERTS'}">
+            <!-- Search bar proposing all known contracts -->
+            <div th:replace="~{components/search-bar :: searchBar}"></div>
+
+            <!-- Alerts list -->
+            <section th:replace="~{components/alert-list :: alertList}"></section>
+        </th:block>
+
+        <!-- Status Menus (PAUSED, ACTIVE, CAPPED): Campaigns table -->
+        <th:block th:if="${param.status != null and param.status[0] != 'ALERTS'}">
+            <section th:replace="~{components/budget-table :: budgetTable}"></section>
+        </th:block>
     </main>
 </body>
 </html>

@@ -1,7 +1,6 @@
-package io.github.sekelenao.demo.controller;
+package io.github.sekelenao.demo.scenario;
 
 import io.github.sekelenao.demo.model.Scenario;
-import io.github.sekelenao.demo.scenario.ScenarioService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +9,7 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
+import java.util.Set;
 
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
@@ -32,16 +32,20 @@ class ScenarioControllerTest {
     private ScenarioService scenarioService;
 
     @Test
-    @DisplayName("Should display index view with scenarios in model")
+    @DisplayName("Should display index view with scenarios and contracts in model")
     void shouldDisplayIndexPageWithScenarios() throws Exception {
         Scenario scenario = new Scenario("showcase-demo", "Showcase demo", List.of());
         when(scenarioService.listScenarios()).thenReturn(List.of(scenario));
+        when(scenarioService.listContracts()).thenReturn(Set.of("cmp-google-pixel9"));
 
         mockMvc.perform(get("/"))
             .andExpect(status().isOk())
             .andExpect(view().name("index"))
-            .andExpect(model().attributeExists("scenarios"));
+            .andExpect(model().attributeExists("scenarios"))
+            .andExpect(model().attributeExists("contracts"));
     }
+
+
 
     @Test
     @DisplayName("Should run scenario and redirect with success flash message")

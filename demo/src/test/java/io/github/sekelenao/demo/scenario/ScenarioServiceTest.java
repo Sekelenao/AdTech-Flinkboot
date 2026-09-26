@@ -1,6 +1,7 @@
 package io.github.sekelenao.demo.scenario;
 
 import io.github.sekelenao.demo.model.Scenario;
+import io.github.sekelenao.demo.model.ScenarioStep;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -12,6 +13,7 @@ import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -95,5 +97,21 @@ class ScenarioServiceTest {
         when(scenarioResourceLoader.retrieveAll()).thenThrow(new IOException("Disk error"));
 
         assertThrows(UncheckedIOException.class, () -> scenarioService.listScenarios());
+    }
+
+    @Test
+    @DisplayName("Should list unique known campaign contracts filtering nulls")
+    void shouldListKnownContracts() throws IOException {
+        var step1 = new ScenarioStep(null, null, "cmp-google", null, null, null, null, null, null, null, null, null, null, null);
+        var step2 = new ScenarioStep(null, null, "cmp-uber", null, null, null, null, null, null, null, null, null, null, null);
+        var stepDuplicate = new ScenarioStep(null, null, "cmp-google", null, null, null, null, null, null, null, null, null, null, null);
+        var stepNullCampaign = new ScenarioStep(null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+
+        var scenario = new Scenario("test-scenario", "description", List.of(step1, step2, stepDuplicate, stepNullCampaign));
+        when(scenarioResourceLoader.retrieveAll()).thenReturn(List.of(scenario));
+
+        var contracts = scenarioService.listContracts();
+
+        assertEquals(Set.of("cmp-google", "cmp-uber"), contracts);
     }
 }

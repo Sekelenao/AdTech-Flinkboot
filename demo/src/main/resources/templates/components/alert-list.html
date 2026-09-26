@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+    <section th:fragment="alertList" class="alert-card">
+        <div class="alert-card-header">
+            <div class="alert-card-title">
+                <span>Budget Alerts</span>
+            </div>
+        </div>
+        <div class="alert-card-body">
+            <div th:if="${alerts == null or #lists.isEmpty(alerts)}" class="empty-alert-state">
+                <div class="empty-alert-icon">&#x1F514;</div>
+                <div class="empty-alert-title">No Budget Alerts</div>
+                <p class="empty-alert-desc">
+                    No budget alerts triggered yet.
+                </p>
+            </div>
+
+            <div th:if="${alerts != null and not #lists.isEmpty(alerts)}" class="table-responsive">
+                <table class="adtech-table">
+                    <thead>
+                        <tr>
+                            <th>Campaign ID</th>
+                            <th>Advertiser ID</th>
+                            <th style="text-align: right;">Allocated Budget</th>
+                            <th style="text-align: right;">Spent Budget</th>
+                            <th>Status</th>
+                            <th>Time</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="alert : ${alerts}">
+                            <td><code th:text="${alert.campaignId}">cmp-1</code></td>
+                            <td th:text="${alert.advertiserId}">adv-1</td>
+                            <td style="text-align: right; font-weight: 600;" th:text="${alert.allocatedBudget}">0</td>
+                            <td style="text-align: right; color: var(--danger); font-weight: 600;" th:text="${alert.spentBudget}">0</td>
+                            <td>
+                                <span class="tag tag-red">
+                                    <span class="status-dot red"></span> CAPPED
+                                </span>
+                            </td>
+                            <td th:text="${alert.exhaustedAt}">0</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+</body>
+</html>

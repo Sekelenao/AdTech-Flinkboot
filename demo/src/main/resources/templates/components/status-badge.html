@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+    <span th:fragment="statusBadge(status)" th:switch="${status != null ? status.name() : ''}">
+        <span th:case="'ACTIVE'" class="tag tag-green">
+            <span class="status-dot green"></span> ACTIVE
+        </span>
+        <span th:case="'PAUSED'" class="tag tag-default">
+            <span class="status-dot gray"></span> PAUSED
+        </span>
+        <span th:case="'CAPPED'" class="tag tag-red">
+            <span class="status-dot red"></span> CAPPED
+        </span>
+        <span th:case="'BUDGET_CAPPED'" class="tag tag-red">
+            <span class="status-dot red"></span> CAPPED
+        </span>
+        <span th:case="*" class="tag tag-default">
+            <span class="status-dot gray"></span> <span th:text="${status}">UNKNOWN</span>
+        </span>
+    </span>
+</body>
+</html>

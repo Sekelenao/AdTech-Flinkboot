@@ -1,6 +1,8 @@
 spring:
   application:
     name: Adtech-Flinkboot
+  profiles:
+    active: demo
   threads:
     virtual:
       enabled: true

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+    <div th:fragment="searchBar" class="search-bar-wrapper">
+        <form th:action="@{/}" method="get" class="search-form">
+            <div class="search-input-group">
+                <span class="search-icon">&#x1F50D;</span>
+                <input type="search"
+                       name="contract"
+                       class="search-input"
+                       placeholder="Search known contract (e.g. cmp-google-pixel9)..."
+                       list="contracts-datalist"
+                       autocomplete="off"
+                       th:value="${param.contract != null ? param.contract[0] : ''}">
+                <datalist id="contracts-datalist">
+                    <option th:each="contract : ${contracts}"
+                            th:value="${contract}"
+                            th:text="${contract}">
+                    </option>
+                </datalist>
+                <button type="submit" class="btn btn-primary search-btn">Lookup</button>
+                <a th:if="${param.contract != null}"
+                   th:href="@{/}"
+                   class="btn btn-secondary clear-btn"
+                   title="Clear search">
+                    Clear
+                </a>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

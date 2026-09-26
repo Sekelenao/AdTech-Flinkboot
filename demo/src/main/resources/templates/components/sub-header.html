@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+    <nav th:fragment="subHeader" class="sub-header-bar">
+        <div class="sub-header-container">
+            <ul class="sub-nav-menu">
+                <li class="sub-nav-item">
+                    <a th:href="@{/(status='ALERTS')}"
+                       th:classappend="${param.status == null or param.status[0] == 'ALERTS'} ? 'active' : ''"
+                       class="sub-nav-link">
+                        ALERTS
+                    </a>
+                </li>
+                <li class="sub-nav-item">
+                    <a th:href="@{/(status='PAUSED')}"
+                       th:classappend="${param.status != null and param.status[0] == 'PAUSED'} ? 'active' : ''"
+                       class="sub-nav-link">
+                        <span class="status-dot gray"></span> PAUSED
+                    </a>
+                </li>
+                <li class="sub-nav-item">
+                    <a th:href="@{/(status='ACTIVE')}"
+                       th:classappend="${param.status != null and param.status[0] == 'ACTIVE'} ? 'active' : ''"
+                       class="sub-nav-link">
+                        <span class="status-dot green"></span> ACTIVE
+                    </a>
+                </li>
+                <li class="sub-nav-item">
+                    <a th:href="@{/(status='CAPPED')}"
+                       th:classappend="${param.status != null and param.status[0] == 'CAPPED'} ? 'active' : ''"
+                       class="sub-nav-link">
+                        <span class="status-dot red"></span> CAPPED
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</body>
+</html>

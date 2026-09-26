@@ -39,6 +39,46 @@ services:
     ports:
       - "9124:9124"
 
+  init-fluss:
+    image: apache/fluss-quickstart-flink:1.20-1.0.0
+    container_name: adtech-init-fluss
+    depends_on:
+      - coordinator-server
+      - tablet-server
+    network_mode: host
+    entrypoint: [ '/bin/bash', '-c' ]
+    command: |
+      "
+      echo 'Waiting for Fluss coordinator to be ready...'
+      while ! timeout 1 bash -c 'cat < /dev/null > /dev/tcp/localhost/9123' 2>/dev/null; do
+        sleep 0.5
+      done
+      echo 'Fluss coordinator is ready. Initializing tables...'
+      cat << 'EOF' > /tmp/init-fluss.sql
+      CREATE CATALOG IF NOT EXISTS fluss WITH (
+          'type' = 'fluss',
+          'bootstrap.servers' = 'localhost:9123'
+      );
+      USE CATALOG fluss;
+      CREATE TABLE IF NOT EXISTS campaign_live_budgets (
+          campaign_id STRING,
+          advertiser_id STRING,
+          status STRING,
+          allocated_budget BIGINT,
+          spent_budget BIGINT,
+          remaining_budget BIGINT,
+          impression_count BIGINT,
+          click_count BIGINT,
+          attributed_conversion_count BIGINT,
+          attributed_revenue BIGINT,
+          last_update_time BIGINT,
+          PRIMARY KEY (campaign_id) NOT ENFORCED
+      );
+      EOF
+      /opt/flink/bin/sql-client.sh -f /tmp/init-fluss.sql
+      echo 'All Fluss tables created successfully!'
+      "
+
   redpanda:
     image: docker.redpanda.com/redpandadata/redpanda:latest
     container_name: adtech-redpanda

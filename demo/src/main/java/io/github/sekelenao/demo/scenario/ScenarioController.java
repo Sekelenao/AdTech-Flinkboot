@@ -1,6 +1,5 @@
-package io.github.sekelenao.demo.controller;
+package io.github.sekelenao.demo.scenario;
 
-import io.github.sekelenao.demo.scenario.ScenarioService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -31,6 +30,7 @@ public class ScenarioController {
     public String index(Model model) {
         Objects.requireNonNull(model);
         model.addAttribute("scenarios", scenarioService.listScenarios());
+        model.addAttribute("contracts", scenarioService.listContracts());
         return "index";
     }
 
@@ -43,7 +43,6 @@ public class ScenarioController {
     public String runScenario(@PathVariable("name") String name, RedirectAttributes redirectAttributes) {
         Objects.requireNonNull(name);
         Objects.requireNonNull(redirectAttributes);
-
         try {
             LOGGER.info("User requested execution of scenario '{}'", name);
             scenarioService.runScenario(name);
