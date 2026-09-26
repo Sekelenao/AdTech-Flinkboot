@@ -25,3 +25,9 @@ adtech:
         clicks: ad_clicks
       conversion:
         events: conversions
+  fluss:
+    bootstrap-servers:
+      - "localhost:9123"
+    database: "fluss"
+    table: "campaign_live_budgets"
+    poll-timeout: 500ms

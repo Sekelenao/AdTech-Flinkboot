@@ -1,5 +1,6 @@
 package io.github.sekelenao.demo.properties;
 
+import io.github.sekelenao.demo.properties.part.FlussProperties;
 import io.github.sekelenao.demo.properties.part.KafkaProperties;
 import io.github.sekelenao.demo.properties.part.ScenariosProperties;
 import jakarta.validation.Valid;
@@ -16,7 +17,8 @@ import java.util.Objects;
 @ConfigurationProperties(prefix = "adtech")
 public record AdtechProperties(
     @NotNull @Valid KafkaProperties kafka,
-    @NotNull @Valid ScenariosProperties scenarios
+    @NotNull @Valid ScenariosProperties scenarios,
+    @Valid FlussProperties fluss
 ) {
     public AdtechProperties {
         Objects.requireNonNull(kafka);
