@@ -7,11 +7,13 @@ import io.github.sekelenao.demo.scenario.handler.StepHandler;
 import io.github.sekelenao.demo.util.Sleeps;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -30,7 +32,8 @@ public class ScenarioRunner {
         this.handlers = stepHandlers.stream().collect(Collectors.toMap(StepHandler::action, Function.identity()));
     }
 
-    public void run(Scenario scenario) {
+    @Async
+    public CompletableFuture<Void> run(Scenario scenario) {
         Objects.requireNonNull(scenario);
         var stepsAmount = scenario.steps().size();
         LOGGER.info("Starting execution of scenario '{}' ({} steps)", scenario.name(), stepsAmount);
@@ -38,13 +41,13 @@ public class ScenarioRunner {
             var step = scenario.steps().get(i);
             LOGGER.info("[Step {}/{}] Executing {} - {}", i + 1, stepsAmount, step.action(), step.description());
             var handler = handlers.get(step.action());
-            if(handler == null){
+            if (handler == null) {
                 throw new IllegalStateException("No handler registered for action: " + step.action());
             }
             handler.handle(step);
             step.delayAfterMs().ifPresent(Sleeps::sleep);
         }
         LOGGER.info("Finished execution of scenario '{}'", scenario.name());
+        return CompletableFuture.completedFuture(null);
     }
-
 }

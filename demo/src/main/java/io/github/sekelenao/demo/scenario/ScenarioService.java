@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
 @Service
@@ -23,6 +24,8 @@ public class ScenarioService {
     private final ScenarioResourceLoader scenarioResourceLoader;
 
     private final ScenarioRunner scenarioRunner;
+
+    private final AtomicBoolean running = new AtomicBoolean(false);
 
     public ScenarioService(ScenarioResourceLoader scenarioResourceLoader, ScenarioRunner scenarioRunner) {
         this.scenarioResourceLoader = Objects.requireNonNull(scenarioResourceLoader);
@@ -48,8 +51,20 @@ public class ScenarioService {
         Objects.requireNonNull(name);
         var scenario = getScenario(name)
             .orElseThrow(() -> new IllegalArgumentException("Scenario not found: " + name));
+        if (!running.compareAndSet(false, true)) {
+            throw new IllegalStateException("A scenario is already running. Please wait for it to complete.");
+        }
         LOGGER.info("Triggering execution of scenario '{}'", scenario.name());
-        scenarioRunner.run(scenario);
+        try {
+            scenarioRunner.run(scenario).whenComplete((_, _) -> running.set(false));
+        } catch (Exception exception) {
+            running.set(false);
+            throw exception;
+        }
+    }
+
+    public boolean isRunning() {
+        return running.get();
     }
 
     @Cacheable("contracts")

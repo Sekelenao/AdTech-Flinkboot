@@ -4,11 +4,11 @@
     <div th:fragment="notifications">
         <div th:if="${successMessage}" class="alert-box alert-box-success">
             <span>&#x2714;</span>
-            <span th:text="${successMessage}">Scenario executed successfully!</span>
+            <span th:text="${successMessage}">Scenario launched successfully!</span>
         </div>
         <div th:if="${errorMessage}" class="alert-box alert-box-danger">
             <span>&#x2716;</span>
-            <span th:text="${errorMessage}">Scenario execution failed!</span>
+            <span th:text="${errorMessage}">Scenario launch failed!</span>
         </div>
     </div>
 </body>

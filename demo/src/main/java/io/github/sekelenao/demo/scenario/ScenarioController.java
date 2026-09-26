@@ -31,6 +31,7 @@ public class ScenarioController {
         Objects.requireNonNull(model);
         model.addAttribute("scenarios", scenarioService.listScenarios());
         model.addAttribute("contracts", scenarioService.listContracts());
+        model.addAttribute("isRunning", scenarioService.isRunning());
         return "index";
     }
 
@@ -46,10 +47,10 @@ public class ScenarioController {
         try {
             LOGGER.info("User requested execution of scenario '{}'", name);
             scenarioService.runScenario(name);
-            redirectAttributes.addFlashAttribute("successMessage", "Scenario '" + name + "' executed successfully!");
+            redirectAttributes.addFlashAttribute("successMessage", "Scenario '" + name + "' launched successfully!");
         } catch (Exception exception) {
             LOGGER.error("Execution failed for scenario '{}'", name, exception);
-            redirectAttributes.addFlashAttribute("errorMessage", "Failed to execute scenario '" + name + "': " + exception.getMessage());
+            redirectAttributes.addFlashAttribute("errorMessage", "Failed to launch scenario '" + name + "': " + exception.getMessage());
         }
         return "redirect:/";
     }

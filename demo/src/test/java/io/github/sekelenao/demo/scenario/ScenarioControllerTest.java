@@ -53,7 +53,7 @@ class ScenarioControllerTest {
         mockMvc.perform(post("/scenarios/{name}/run", "showcase-demo"))
             .andExpect(status().is3xxRedirection())
             .andExpect(redirectedUrl("/"))
-            .andExpect(flash().attributeExists("successMessage"));
+            .andExpect(flash().attribute("successMessage", "Scenario 'showcase-demo' launched successfully!"));
 
         verify(scenarioService).runScenario("showcase-demo");
     }
@@ -64,7 +64,7 @@ class ScenarioControllerTest {
         mockMvc.perform(post("/scenarios/run").param("name", "showcase-demo"))
             .andExpect(status().is3xxRedirection())
             .andExpect(redirectedUrl("/"))
-            .andExpect(flash().attributeExists("successMessage"));
+            .andExpect(flash().attribute("successMessage", "Scenario 'showcase-demo' launched successfully!"));
 
         verify(scenarioService).runScenario("showcase-demo");
     }
@@ -72,11 +72,11 @@ class ScenarioControllerTest {
     @Test
     @DisplayName("Should handle scenario execution error and redirect with error flash message")
     void shouldHandleRunScenarioErrorAndRedirectWithErrorMessage() throws Exception {
-        doThrow(new RuntimeException("Kafka error")).when(scenarioService).runScenario("showcase-demo");
+        doThrow(new RuntimeException("A scenario is already running")).when(scenarioService).runScenario("showcase-demo");
 
         mockMvc.perform(post("/scenarios/{name}/run", "showcase-demo"))
             .andExpect(status().is3xxRedirection())
             .andExpect(redirectedUrl("/"))
-            .andExpect(flash().attributeExists("errorMessage"));
+            .andExpect(flash().attribute("errorMessage", "Failed to launch scenario 'showcase-demo': A scenario is already running"));
     }
 }

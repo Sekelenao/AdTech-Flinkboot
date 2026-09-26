@@ -14,6 +14,7 @@ import java.io.UncheckedIOException;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.concurrent.CompletableFuture;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -77,10 +78,53 @@ class ScenarioServiceTest {
     @DisplayName("Should run scenario by name")
     void shouldRunScenarioByName() throws IOException {
         when(scenarioResourceLoader.retrieveAll()).thenReturn(List.of(showcaseScenario));
+        when(scenarioRunner.run(showcaseScenario)).thenReturn(CompletableFuture.completedFuture(null));
 
         scenarioService.runScenario("showcase-demo");
 
         verify(scenarioRunner).run(showcaseScenario);
+        assertFalse(scenarioService.isRunning());
+    }
+
+    @Test
+    @DisplayName("Should prevent running multiple scenarios concurrently")
+    void shouldPreventConcurrentScenarioExecutions() throws IOException {
+        when(scenarioResourceLoader.retrieveAll()).thenReturn(List.of(showcaseScenario));
+        var pendingFuture = new CompletableFuture<Void>();
+        when(scenarioRunner.run(showcaseScenario)).thenReturn(pendingFuture);
+
+        scenarioService.runScenario("showcase-demo");
+        assertTrue(scenarioService.isRunning());
+
+        var exception = assertThrows(IllegalStateException.class, () -> scenarioService.runScenario("showcase-demo"));
+        assertEquals("A scenario is already running. Please wait for it to complete.", exception.getMessage());
+
+        pendingFuture.complete(null);
+        assertFalse(scenarioService.isRunning());
+    }
+
+    @Test
+    @DisplayName("Should reset running flag when scenario execution fails asynchronously")
+    void shouldResetRunningFlagWhenScenarioFailsAsync() throws IOException {
+        when(scenarioResourceLoader.retrieveAll()).thenReturn(List.of(showcaseScenario));
+        var failingFuture = new CompletableFuture<Void>();
+        when(scenarioRunner.run(showcaseScenario)).thenReturn(failingFuture);
+
+        scenarioService.runScenario("showcase-demo");
+        assertTrue(scenarioService.isRunning());
+
+        failingFuture.completeExceptionally(new RuntimeException("Async step failure"));
+        assertFalse(scenarioService.isRunning());
+    }
+
+    @Test
+    @DisplayName("Should reset running flag when scenarioRunner throws synchronously")
+    void shouldResetRunningFlagWhenRunnerThrowsSynchronously() throws IOException {
+        when(scenarioResourceLoader.retrieveAll()).thenReturn(List.of(showcaseScenario));
+        when(scenarioRunner.run(showcaseScenario)).thenThrow(new RuntimeException("Direct failure"));
+
+        assertThrows(RuntimeException.class, () -> scenarioService.runScenario("showcase-demo"));
+        assertFalse(scenarioService.isRunning());
     }
 
     @Test
