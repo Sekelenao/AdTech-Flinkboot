@@ -34,7 +34,7 @@ public class ConversionStepHandler implements StepHandler {
         conversion.conversionId = UUID.randomUUID().toString();
         conversion.advertiserId = step.advertiserId();
         conversion.userId = step.userId();
-        conversion.orderAmount = Currencies.toMicros(step.orderAmountEur());
+        conversion.orderAmount = Currencies.toMicros(step.orderAmount());
 
         conversionPublisher.publish(conversion);
     }

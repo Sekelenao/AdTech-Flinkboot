@@ -5,29 +5,29 @@
         <div class="sub-header-container">
             <ul class="sub-nav-menu">
                 <li class="sub-nav-item">
-                    <a th:href="@{/(status='ALERTS')}"
-                       th:classappend="${param.status == null or param.status[0] == 'ALERTS'} ? 'active' : ''"
+                    <a th:href="@{/alerts}"
+                       th:classappend="${activeMenu == 'ALERTS'} ? 'active' : ''"
                        class="sub-nav-link">
                         ALERTS
                     </a>
                 </li>
                 <li class="sub-nav-item">
-                    <a th:href="@{/(status='PAUSED')}"
-                       th:classappend="${param.status != null and param.status[0] == 'PAUSED'} ? 'active' : ''"
+                    <a th:href="@{/campaigns/status/PAUSED}"
+                       th:classappend="${activeMenu == 'PAUSED'} ? 'active' : ''"
                        class="sub-nav-link">
                         <span class="status-dot gray"></span> PAUSED
                     </a>
                 </li>
                 <li class="sub-nav-item">
-                    <a th:href="@{/(status='ACTIVE')}"
-                       th:classappend="${param.status != null and param.status[0] == 'ACTIVE'} ? 'active' : ''"
+                    <a th:href="@{/campaigns/status/ACTIVE}"
+                       th:classappend="${activeMenu == 'ACTIVE'} ? 'active' : ''"
                        class="sub-nav-link">
                         <span class="status-dot green"></span> ACTIVE
                     </a>
                 </li>
                 <li class="sub-nav-item">
-                    <a th:href="@{/(status='CAPPED')}"
-                       th:classappend="${param.status != null and param.status[0] == 'CAPPED'} ? 'active' : ''"
+                    <a th:href="@{/campaigns/status/CAPPED}"
+                       th:classappend="${activeMenu == 'CAPPED'} ? 'active' : ''"
                        class="sub-nav-link">
                         <span class="status-dot red"></span> CAPPED
                     </a>

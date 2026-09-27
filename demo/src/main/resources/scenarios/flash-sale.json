@@ -4,21 +4,21 @@
   "steps": [
     {
       "action": "CAMPAIGN",
-      "description": "Initialize Google Flash Deals campaign with 500.00 EUR budget",
+      "description": "Initialize Google Flash Deals campaign with $500.00 budget",
       "campaignId": "cmp-google-flash",
       "advertiserId": "adv-google",
       "advertiserName": "Google",
-      "allocatedBudgetEur": 500.00,
+      "allocatedBudget": 500.00,
       "status": "ACTIVE",
       "delayAfterMs": 300
     },
     {
       "action": "CAMPAIGN",
-      "description": "Initialize TradingView Black Friday campaign with 200.00 EUR budget",
+      "description": "Initialize TradingView Black Friday campaign with $200.00 budget",
       "campaignId": "cmp-tv-sale",
       "advertiserId": "adv-tradingview",
       "advertiserName": "TradingView",
-      "allocatedBudgetEur": 200.00,
+      "allocatedBudget": 200.00,
       "status": "ACTIVE",
       "delayAfterMs": 300
     },
@@ -28,17 +28,17 @@
       "campaignId": "cmp-google-flash",
       "advertiserId": "adv-google",
       "userId": "usr-flash-1",
-      "costEur": 0.60,
+      "cost": 0.60,
       "count": 20,
       "delayBetweenMs": 50,
       "delayAfterMs": 500
     },
     {
       "action": "CONVERSION",
-      "description": "Flash sale conversion for user flash-1 for 499.00 EUR",
+      "description": "Flash sale conversion for user flash-1 for $499.00",
       "advertiserId": "adv-google",
       "userId": "usr-flash-1",
-      "orderAmountEur": 499.00,
+      "orderAmount": 499.00,
       "delayAfterMs": 800
     },
     {
@@ -47,17 +47,17 @@
       "campaignId": "cmp-tv-sale",
       "advertiserId": "adv-tradingview",
       "userId": "usr-flash-2",
-      "costEur": 0.40,
+      "cost": 0.40,
       "count": 15,
       "delayBetweenMs": 50,
       "delayAfterMs": 500
     },
     {
       "action": "CONVERSION",
-      "description": "Annual subscription purchase on TradingView for 179.00 EUR",
+      "description": "Annual subscription purchase on TradingView for $179.00",
       "advertiserId": "adv-tradingview",
       "userId": "usr-flash-2",
-      "orderAmountEur": 179.00,
+      "orderAmount": 179.00,
       "delayAfterMs": 500
     }
   ]

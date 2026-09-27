@@ -26,13 +26,13 @@ public class ScenarioStep {
 
     private final String userId;
 
-    private final BigDecimal allocatedBudgetEur;
+    private final BigDecimal allocatedBudget;
 
-    private final BigDecimal newAllocatedBudgetEur;
+    private final BigDecimal newAllocatedBudget;
 
-    private final BigDecimal costEur;
+    private final BigDecimal cost;
 
-    private final BigDecimal orderAmountEur;
+    private final BigDecimal orderAmount;
 
     private final CampaignStatus status;
 
@@ -50,10 +50,10 @@ public class ScenarioStep {
         @JsonProperty("advertiserId") String advertiserId,
         @JsonProperty("advertiserName") String advertiserName,
         @JsonProperty("userId") String userId,
-        @JsonProperty("allocatedBudgetEur") BigDecimal allocatedBudgetEur,
-        @JsonProperty("newAllocatedBudgetEur") BigDecimal newAllocatedBudgetEur,
-        @JsonProperty("costEur") BigDecimal costEur,
-        @JsonProperty("orderAmountEur") BigDecimal orderAmountEur,
+        @JsonProperty("allocatedBudget") BigDecimal allocatedBudget,
+        @JsonProperty("newAllocatedBudget") BigDecimal newAllocatedBudget,
+        @JsonProperty("cost") BigDecimal cost,
+        @JsonProperty("orderAmount") BigDecimal orderAmount,
         @JsonProperty("status") CampaignStatus status,
         @JsonProperty("count") Integer count,
         @JsonProperty("delayBetweenMs") Long delayBetweenMs,
@@ -65,10 +65,10 @@ public class ScenarioStep {
         this.advertiserId = advertiserId;
         this.advertiserName = advertiserName;
         this.userId = userId;
-        this.allocatedBudgetEur = allocatedBudgetEur;
-        this.newAllocatedBudgetEur = newAllocatedBudgetEur;
-        this.costEur = costEur;
-        this.orderAmountEur = orderAmountEur;
+        this.allocatedBudget = allocatedBudget;
+        this.newAllocatedBudget = newAllocatedBudget;
+        this.cost = cost;
+        this.orderAmount = orderAmount;
         this.status = status;
         this.count = count;
         this.delayBetweenMs = delayBetweenMs;
@@ -99,20 +99,20 @@ public class ScenarioStep {
         return userId;
     }
 
-    public BigDecimal allocatedBudgetEur() {
-        return allocatedBudgetEur;
+    public BigDecimal allocatedBudget() {
+        return allocatedBudget;
     }
 
-    public BigDecimal newAllocatedBudgetEur() {
-        return newAllocatedBudgetEur;
+    public BigDecimal newAllocatedBudget() {
+        return newAllocatedBudget;
     }
 
-    public BigDecimal costEur() {
-        return costEur;
+    public BigDecimal cost() {
+        return cost;
     }
 
-    public BigDecimal orderAmountEur() {
-        return orderAmountEur;
+    public BigDecimal orderAmount() {
+        return orderAmount;
     }
 
     public CampaignStatus status() {

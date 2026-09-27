@@ -35,7 +35,7 @@ public class ImpressionStepHandler implements StepHandler {
         impression.campaignId = step.campaignId();
         impression.advertiserId = step.advertiserId();
         impression.userId = step.userId();
-        impression.cost = Currencies.toMicros(step.costEur());
+        impression.cost = Currencies.toMicros(step.cost());
 
         impressionPublisher.publish(impression);
     }

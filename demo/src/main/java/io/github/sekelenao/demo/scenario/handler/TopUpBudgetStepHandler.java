@@ -32,7 +32,7 @@ public class TopUpBudgetStepHandler implements StepHandler {
         CampaignBudget budget = new CampaignBudget();
         budget.campaignId = step.campaignId();
         budget.advertiserId = step.advertiserId();
-        budget.allocatedBudget = Currencies.toMicros(step.newAllocatedBudgetEur());
+        budget.allocatedBudget = Currencies.toMicros(step.newAllocatedBudget());
         budget.status = CampaignStatus.ACTIVE;
         budget.updatedAt = Instant.now().toEpochMilli();
 

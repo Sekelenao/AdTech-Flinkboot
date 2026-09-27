@@ -38,7 +38,7 @@ public class BurstClicksStepHandler implements StepHandler {
             click.campaignId = step.campaignId();
             click.advertiserId = step.advertiserId();
             click.userId = step.userId();
-            click.cost = Currencies.toMicros(step.costEur());
+            click.cost = Currencies.toMicros(step.cost());
             clickPublisher.publish(click);
             if (i < count - 1) {
                 step.delayBetweenMs().ifPresent(Sleeps::sleep);

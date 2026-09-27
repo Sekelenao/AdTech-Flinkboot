@@ -33,7 +33,7 @@ public class CampaignStepHandler implements StepHandler {
         CampaignBudget budget = new CampaignBudget();
         budget.campaignId = step.campaignId();
         budget.advertiserId = step.advertiserId();
-        budget.allocatedBudget = Currencies.toMicros(step.allocatedBudgetEur());
+        budget.allocatedBudget = Currencies.toMicros(step.allocatedBudget());
         budget.status = Optional.ofNullable(step.status()).orElse(CampaignStatus.ACTIVE);
         budget.updatedAt = Instant.now().toEpochMilli();
 

@@ -4,56 +4,56 @@
   "steps": [
     {
       "action": "CAMPAIGN",
-      "description": "Initialize Uber Express campaign with tightly constrained 3.00 EUR budget",
+      "description": "Initialize Uber Express campaign with tightly constrained $3.00 budget",
       "campaignId": "cmp-uber-express",
       "advertiserId": "adv-uber",
       "advertiserName": "Uber",
-      "allocatedBudgetEur": 3.00,
+      "allocatedBudget": 3.00,
       "status": "ACTIVE",
       "delayAfterMs": 400
     },
     {
       "action": "CLICK",
-      "description": "Click 1 (0.80 EUR spent / 3.00 EUR budget = 26%)",
+      "description": "Click 1 ($0.80 spent / $3.00 budget = 26%)",
       "campaignId": "cmp-uber-express",
       "advertiserId": "adv-uber",
       "userId": "usr-stress-1",
-      "costEur": 0.80,
+      "cost": 0.80,
       "delayAfterMs": 300
     },
     {
       "action": "CLICK",
-      "description": "Click 2 (1.60 EUR spent / 3.00 EUR budget = 53%)",
+      "description": "Click 2 ($1.60 spent / $3.00 budget = 53%)",
       "campaignId": "cmp-uber-express",
       "advertiserId": "adv-uber",
       "userId": "usr-stress-1",
-      "costEur": 0.80,
+      "cost": 0.80,
       "delayAfterMs": 300
     },
     {
       "action": "CLICK",
-      "description": "Click 3 (2.40 EUR spent / 3.00 EUR budget = 80% -> triggers budget alert!)",
+      "description": "Click 3 ($2.40 spent / $3.00 budget = 80% -> triggers budget alert!)",
       "campaignId": "cmp-uber-express",
       "advertiserId": "adv-uber",
       "userId": "usr-stress-1",
-      "costEur": 0.80,
+      "cost": 0.80,
       "delayAfterMs": 500
     },
     {
       "action": "CLICK",
-      "description": "Click 4 (3.20 EUR spent / 3.00 EUR budget = 106% -> triggers CAPPED state!)",
+      "description": "Click 4 ($3.20 spent / $3.00 budget = 106% -> triggers CAPPED state!)",
       "campaignId": "cmp-uber-express",
       "advertiserId": "adv-uber",
       "userId": "usr-stress-1",
-      "costEur": 0.80,
+      "cost": 0.80,
       "delayAfterMs": 1500
     },
     {
       "action": "TOP_UP_BUDGET",
-      "description": "Top up budget to 10.00 EUR (should trigger transition from CAPPED back to ACTIVE)",
+      "description": "Top up budget to $10.00 (should trigger transition from CAPPED back to ACTIVE)",
       "campaignId": "cmp-uber-express",
       "advertiserId": "adv-uber",
-      "newAllocatedBudgetEur": 10.00,
+      "newAllocatedBudget": 10.00,
       "delayAfterMs": 800
     },
     {
@@ -62,7 +62,7 @@
       "campaignId": "cmp-uber-express",
       "advertiserId": "adv-uber",
       "userId": "usr-stress-1",
-      "costEur": 0.80,
+      "cost": 0.80,
       "delayAfterMs": 500
     }
   ]

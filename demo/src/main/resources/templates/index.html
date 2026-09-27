@@ -13,17 +13,15 @@
     <main class="dashboard-container">
         <div th:replace="~{components/notifications :: notifications}"></div>
 
-        <!-- ALERTS Menu (default view): Search bar + Alerts list -->
-        <th:block th:if="${param.status == null or param.status[0] == 'ALERTS'}">
-            <!-- Search bar proposing all known contracts -->
+        <!-- ALERTS View: Search bar + Alerts list -->
+        <th:block th:if="${alerts != null}">
             <div th:replace="~{components/search-bar :: searchBar}"></div>
-
-            <!-- Alerts list -->
             <section th:replace="~{components/alert-list :: alertList}"></section>
         </th:block>
 
-        <!-- Status Menus (PAUSED, ACTIVE, CAPPED): Campaigns table -->
-        <th:block th:if="${param.status != null and param.status[0] != 'ALERTS'}">
+        <!-- CAMPAIGNS View (by status or by search): Search bar (if searched) + Budget table -->
+        <th:block th:if="${campaigns != null}">
+            <div th:if="${campaignId != null}" th:replace="~{components/search-bar :: searchBar}"></div>
             <section th:replace="~{components/budget-table :: budgetTable}"></section>
         </th:block>
     </main>

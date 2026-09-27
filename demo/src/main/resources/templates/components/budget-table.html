@@ -4,14 +4,15 @@
     <section th:fragment="budgetTable" class="card">
         <div class="card-header">
             <div class="card-title">
-                <span th:text="${param.status != null ? param.status[0] + ' Campaigns' : 'Campaigns'}">Campaigns</span>
+                <span th:text="${campaignId != null ? 'Campaign: ' + campaignId : (currentStatus != null ? currentStatus.name() + ' Campaigns' : 'Campaigns')}">Campaigns</span>
             </div>
         </div>
         <div class="card-body" style="padding: 0;">
             <div th:if="${campaigns == null or #lists.isEmpty(campaigns)}" class="empty-alert-state">
                 <div class="empty-alert-title">No Campaigns</div>
                 <p class="empty-alert-desc">
-                    No campaigns found with status <strong th:text="${param.status != null ? param.status[0] : ''}">STATUS</strong>.
+                    <span th:if="${campaignId != null}">No live campaign found in Fluss with ID <strong th:text="${campaignId}">ID</strong>.</span>
+                    <span th:if="${campaignId == null}">No campaigns found with status <strong th:text="${currentStatus != null ? currentStatus.name() : ''}">STATUS</strong>.</span>
                 </p>
             </div>
 
@@ -36,13 +37,13 @@
                             <td><code th:text="${campaign.advertiserId}">adv-1</code></td>
                             <td><code th:text="${campaign.campaignId}">cmp-1</code></td>
                             <td><span th:replace="~{components/status-badge :: statusBadge(${campaign.status})}"></span></td>
-                            <td style="text-align: right;" th:text="${campaign.allocatedBudget}">0</td>
-                            <td style="text-align: right;" th:text="${campaign.spentBudget}">0</td>
-                            <td style="text-align: right;" th:text="${campaign.remainingBudget}">0</td>
+                            <td style="text-align: right;" th:text="'$' + ${#numbers.formatDecimal(campaign.allocatedBudget / 1000000.0, 1, 2)}">$0.00</td>
+                            <td style="text-align: right;" th:text="'$' + ${#numbers.formatDecimal(campaign.spentBudget / 1000000.0, 1, 2)}">$0.00</td>
+                            <td style="text-align: right;" th:text="'$' + ${#numbers.formatDecimal(campaign.remainingBudget / 1000000.0, 1, 2)}">$0.00</td>
                             <td style="text-align: right;" th:text="${campaign.impressionCount}">0</td>
                             <td style="text-align: right;" th:text="${campaign.clickCount}">0</td>
                             <td style="text-align: right;" th:text="${campaign.attributedConversionCount}">0</td>
-                            <td style="text-align: right;" th:text="${campaign.attributedRevenue}">0</td>
+                            <td style="text-align: right;" th:text="'$' + ${#numbers.formatDecimal(campaign.attributedRevenue / 1000000.0, 1, 2)}">$0.00</td>
                         </tr>
                     </tbody>
                 </table>

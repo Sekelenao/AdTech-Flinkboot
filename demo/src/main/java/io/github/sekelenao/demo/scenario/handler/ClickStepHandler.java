@@ -36,7 +36,7 @@ public class ClickStepHandler implements StepHandler {
         click.campaignId = step.campaignId();
         click.advertiserId = step.advertiserId();
         click.userId = step.userId();
-        click.cost = Currencies.toMicros(step.costEur());
+        click.cost = Currencies.toMicros(step.cost());
 
         clickPublisher.publish(click);
     }

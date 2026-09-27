@@ -32,14 +32,14 @@
                         <tr th:each="alert : ${alerts}">
                             <td><code th:text="${alert.campaignId}">cmp-1</code></td>
                             <td th:text="${alert.advertiserId}">adv-1</td>
-                            <td style="text-align: right; font-weight: 600;" th:text="${alert.allocatedBudget}">0</td>
-                            <td style="text-align: right; color: var(--danger); font-weight: 600;" th:text="${alert.spentBudget}">0</td>
+                            <td style="text-align: right; font-weight: 600;" th:text="'$' + ${#numbers.formatDecimal(alert.allocatedBudget / 1000000.0, 1, 2)}">$0.00</td>
+                            <td style="text-align: right; color: var(--danger); font-weight: 600;" th:text="'$' + ${#numbers.formatDecimal(alert.spentBudget / 1000000.0, 1, 2)}">$0.00</td>
                             <td>
                                 <span class="tag tag-red">
                                     <span class="status-dot red"></span> CAPPED
                                 </span>
                             </td>
-                            <td th:text="${alert.exhaustedAt}">0</td>
+                            <td th:text="${alert.exhaustedAt > 0 ? #dates.format(new java.util.Date(alert.exhaustedAt), 'HH:mm:ss') : '-'}">-</td>
                         </tr>
                     </tbody>
                 </table>
