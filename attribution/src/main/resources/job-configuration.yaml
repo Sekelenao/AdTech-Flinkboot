@@ -49,3 +49,10 @@ attributed-conversions-sink:
     - "localhost:9092"
   topic: "attributed_conversions"
   delivery-guarantee: "AT_LEAST_ONCE"
+
+fluss-sink:
+  name: "campaign-attribution-fluss-sink"
+  bootstrap-servers:
+    - "localhost:9123"
+  database: "fluss"
+  table: "campaign_live_budgets"

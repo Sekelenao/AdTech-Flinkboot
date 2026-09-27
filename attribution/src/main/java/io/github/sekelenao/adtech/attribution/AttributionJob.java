@@ -1,18 +1,22 @@
 package io.github.sekelenao.adtech.attribution;
 
 import io.github.sekelenao.adtech.attribution.configuration.AttributionJobConfiguration;
+import io.github.sekelenao.adtech.attribution.operator.CampaignAttributionProcessFunction;
 import io.github.sekelenao.adtech.attribution.operator.LastClickAttributionFunction;
+import io.github.sekelenao.adtech.attribution.serde.CampaignAttributionFlussRowConverter;
 import io.github.sekelenao.adtech.attribution.serde.JsonDeserializer;
 import io.github.sekelenao.adtech.attribution.serde.JsonSerializer;
 import io.github.sekelenao.adtech.model.attribution.AttributedConversion;
 import io.github.sekelenao.adtech.model.event.AdClick;
 import io.github.sekelenao.adtech.model.event.Conversion;
 import io.github.sekelenao.flinkboot.core.api.Flinkboot;
+import io.github.sekelenao.flinkboot.fluss.api.sink.FlussSinkFactory;
 import io.github.sekelenao.flinkboot.kafka.api.sink.KafkaSinkFactory;
 import io.github.sekelenao.flinkboot.kafka.api.source.KafkaSourceFactory;
 import org.apache.flink.api.common.eventtime.WatermarkStrategy;
 import org.apache.flink.connector.kafka.sink.KafkaRecordSerializationSchema;
 import org.apache.flink.connector.kafka.source.reader.deserializer.KafkaRecordDeserializationSchema;
+import org.apache.fluss.flink.sink.serializer.RowDataSerializationSchema;
 
 /**
  * Main streaming pipeline application for real-time last-click attribution.
@@ -24,6 +28,7 @@ import org.apache.flink.connector.kafka.source.reader.deserializer.KafkaRecordDe
  *   <li>Connects both streams in {@link LastClickAttributionFunction}, correlating purchases with
  *       the most recent valid click per advertiser within the configured attribution window.</li>
  *   <li>Emits correlated {@link AttributedConversion} events to the Kafka attribution topic.</li>
+ *   <li>Aggregates attribution metrics by campaign and updates Apache Fluss table via partial updates.</li>
  * </ol>
  */
 public class AttributionJob {
@@ -73,7 +78,23 @@ public class AttributionJob {
             .sinkTo(sink)
             .name(configuration.attributedConversionsSink().name());
 
-        // 5. Execute job
+        // 5. Aggregate by campaign and sink to Fluss via partial updates
+        var flussSink = FlussSinkFactory.supplyBuilderFor(
+            configuration.flussSink(),
+            new RowDataSerializationSchema(false, true)
+        )
+            .setPartialUpdateColumns("campaign_id", "attributed_conversion_count", "attributed_revenue", "last_update_time")
+            .build();
+
+        attributedConversionsStream
+            .keyBy(conversion -> conversion.campaignId)
+            .process(new CampaignAttributionProcessFunction())
+            .name("campaign-attribution-aggregator")
+            .map(CampaignAttributionFlussRowConverter::toRowData)
+            .sinkTo(flussSink)
+            .name(configuration.flussSink().name());
+
+        // 6. Execute job
         env.execute(configuration.job().name());
     }
 }

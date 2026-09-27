@@ -31,10 +31,22 @@
             <artifactId>flinkboot-kafka</artifactId>
         </dependency>
 
+        <!-- Flinkboot Fluss (Sink) -->
+        <dependency>
+            <groupId>io.github.sekelenao</groupId>
+            <artifactId>flinkboot-fluss</artifactId>
+        </dependency>
+
         <!-- Flink Streaming API -->
         <dependency>
             <groupId>org.apache.flink</groupId>
             <artifactId>flink-streaming-java</artifactId>
+        </dependency>
+
+        <!-- Flink Table Common (for Fluss RowData) -->
+        <dependency>
+            <groupId>org.apache.flink</groupId>
+            <artifactId>flink-table-common</artifactId>
         </dependency>
 
         <!-- Flink Clients (for local execution) -->

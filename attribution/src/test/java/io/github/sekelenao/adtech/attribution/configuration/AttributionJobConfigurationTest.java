@@ -22,7 +22,8 @@ class AttributionJobConfigurationTest {
                 () -> assertEquals(Duration.ofMinutes(30), config.attribution().window()),
                 () -> assertEquals("ad-clicks-source", config.clicksSource().name()),
                 () -> assertEquals("conversions-source", config.conversionsSource().name()),
-                () -> assertEquals("attributed-conversions-sink", config.attributedConversionsSink().name())
+                () -> assertEquals("attributed-conversions-sink", config.attributedConversionsSink().name()),
+                () -> assertEquals("campaign-attribution-fluss-sink", config.flussSink().name())
         );
     }
 }
