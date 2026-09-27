@@ -4,13 +4,20 @@ services:
     container_name: adtech-zookeeper
     environment:
       ZOO_MY_ID: 1
+    healthcheck:
+      test: ["CMD", "zkServer.sh", "status"]
+      interval: 3s
+      timeout: 3s
+      retries: 10
+      start_period: 3s
 
   coordinator-server:
     image: apache/fluss:1.0.0
     container_name: adtech-fluss-coordinator
     command: coordinatorServer
     depends_on:
-      - zookeeper
+      zookeeper:
+        condition: service_healthy
     environment:
       FLUSS_PROPERTIES: |
         zookeeper.address: zookeeper:2181
@@ -20,14 +27,22 @@ services:
         remote.data.dir: /tmp/fluss/remote-data
     ports:
       - "9123:9123"
+    healthcheck:
+      test: ["CMD", "bash", "-c", "exec 3<>/dev/tcp/coordinator-server/9123 && exec 3<&- && exec 3>&-"]
+      interval: 3s
+      timeout: 3s
+      retries: 15
+      start_period: 3s
 
   tablet-server:
     image: apache/fluss:1.0.0
     container_name: adtech-fluss-tablet
     command: tabletServer
     depends_on:
-      - coordinator-server
+      coordinator-server:
+        condition: service_healthy
     environment:
+      READINESS_TCP_HOST: tablet-server
       FLUSS_PROPERTIES: |
         zookeeper.address: zookeeper:2181
         bind.listeners: INTERNAL://tablet-server:0, CLIENT://tablet-server:9124
@@ -38,22 +53,25 @@ services:
         remote.data.dir: /tmp/fluss/remote-data
     ports:
       - "9124:9124"
+    healthcheck:
+      test: ["CMD", "bash", "/opt/fluss/bin/readiness-check.sh"]
+      interval: 3s
+      timeout: 5s
+      retries: 20
+      start_period: 5s
 
   init-fluss:
     image: apache/fluss-quickstart-flink:1.20-1.0.0
     container_name: adtech-init-fluss
     depends_on:
-      - coordinator-server
-      - tablet-server
+      coordinator-server:
+        condition: service_healthy
+      tablet-server:
+        condition: service_healthy
     network_mode: host
     entrypoint: [ '/bin/bash', '-c' ]
     command: |
       "
-      echo 'Waiting for Fluss coordinator to be ready...'
-      while ! timeout 1 bash -c 'cat < /dev/null > /dev/tcp/localhost/9123' 2>/dev/null; do
-        sleep 0.5
-      done
-      echo 'Fluss coordinator is ready. Initializing tables...'
       cat << 'EOF' > /tmp/init-fluss.sql
       CREATE CATALOG IF NOT EXISTS fluss WITH (
           'type' = 'fluss',
@@ -75,7 +93,11 @@ services:
           PRIMARY KEY (campaign_id) NOT ENFORCED
       );
       EOF
-      /opt/flink/bin/sql-client.sh -f /tmp/init-fluss.sql
+      echo 'Waiting for Fluss cluster to be ready for table initialization...'
+      until /opt/flink/bin/sql-client.sh -f /tmp/init-fluss.sql; do
+        echo 'Fluss coordinator not leader yet or cluster initializing, retrying in 2 seconds...'
+        sleep 2
+      done
       echo 'All Fluss tables created successfully!'
       "
 
@@ -92,12 +114,19 @@ services:
     ports:
       - "9092:9092"
       - "9644:9644"
+    healthcheck:
+      test: ["CMD", "rpk", "cluster", "info"]
+      interval: 3s
+      timeout: 5s
+      retries: 10
+      start_period: 5s
 
   init-topics:
     image: docker.redpanda.com/redpandadata/redpanda:latest
     container_name: adtech-init-topics
     depends_on:
-      - redpanda
+      redpanda:
+        condition: service_healthy
     entrypoint: [ '/bin/sh', '-c' ]
     command: |
       "
@@ -114,7 +143,8 @@ services:
     image: docker.redpanda.com/redpandadata/console:latest
     container_name: adtech-redpanda-console
     depends_on:
-      - redpanda
+      redpanda:
+        condition: service_healthy
     environment:
       KAFKA_BROKERS: redpanda:29092
     ports:
