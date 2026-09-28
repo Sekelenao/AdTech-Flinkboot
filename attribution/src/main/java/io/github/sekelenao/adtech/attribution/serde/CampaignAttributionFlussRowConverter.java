@@ -19,11 +19,11 @@ public final class CampaignAttributionFlussRowConverter {
     public static RowData toRowData(CampaignAttribution attribution) {
         Objects.requireNonNull(attribution);
 
-        var row = new GenericRowData(4);
+        var row = new GenericRowData(11);
         row.setField(0, StringData.fromString(attribution.campaignId));
-        row.setField(1, attribution.attributedConversionCount);
-        row.setField(2, attribution.attributedRevenue);
-        row.setField(3, attribution.lastUpdateTime);
+        row.setField(8, attribution.attributedConversionCount);
+        row.setField(9, attribution.attributedRevenue);
+        row.setField(10, attribution.lastUpdateTime);
         return row;
     }
 }

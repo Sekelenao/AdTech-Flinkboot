@@ -22,11 +22,11 @@ class CampaignAttributionFlussRowConverterTest {
         var row = CampaignAttributionFlussRowConverter.toRowData(attribution);
 
         assertAll(
-            () -> assertEquals(4, row.getArity()),
+            () -> assertEquals(11, row.getArity()),
             () -> assertEquals("cmp-google", row.getString(0).toString()),
-            () -> assertEquals(3L, row.getLong(1)),
-            () -> assertEquals(150_000_000L, row.getLong(2)),
-            () -> assertEquals(123456789L, row.getLong(3))
+            () -> assertEquals(3L, row.getLong(8)),
+            () -> assertEquals(150_000_000L, row.getLong(9)),
+            () -> assertEquals(123456789L, row.getLong(10))
         );
     }
 

@@ -149,3 +149,71 @@ services:
       KAFKA_BROKERS: redpanda:29092
     ports:
       - "8085:8080"
+
+  budget-job:
+    image: eclipse-temurin:11-jre
+    container_name: adtech-budget-job
+    volumes:
+      - .:/app:ro
+    working_dir: /app
+    command: [
+      "java",
+      "-Xms256m",
+      "-Xmx512m",
+      "-cp",
+      "budget/target/classes:model/target/classes:budget/target/dependency/*",
+      "io.github.sekelenao.adtech.budget.BudgetJob"
+    ]
+    depends_on:
+      init-fluss:
+        condition: service_completed_successfully
+      init-topics:
+        condition: service_completed_successfully
+    network_mode: host
+    profiles: [ "jobs", "full" ]
+
+  attribution-job:
+    image: eclipse-temurin:11-jre
+    container_name: adtech-attribution-job
+    volumes:
+      - .:/app:ro
+    working_dir: /app
+    command: [
+      "java",
+      "-Xms256m",
+      "-Xmx512m",
+      "-cp",
+      "attribution/target/classes:model/target/classes:attribution/target/dependency/*",
+      "io.github.sekelenao.adtech.attribution.AttributionJob"
+    ]
+    depends_on:
+      init-fluss:
+        condition: service_completed_successfully
+      init-topics:
+        condition: service_completed_successfully
+    network_mode: host
+    profiles: [ "jobs", "full" ]
+
+  demo:
+    image: eclipse-temurin:25-jre-noble
+    container_name: adtech-demo-app
+    volumes:
+      - .:/app:ro
+    working_dir: /app
+    command: [
+      "java",
+      "-Xms256m",
+      "-Xmx512m",
+      "--enable-native-access=ALL-UNNAMED",
+      "-cp",
+      "demo/target/classes:model/target/classes:demo/target/dependency/*",
+      "io.github.sekelenao.demo.DemoApplication"
+    ]
+    depends_on:
+      budget-job:
+        condition: service_started
+      attribution-job:
+        condition: service_started
+    network_mode: host
+    profiles: [ "app", "full" ]
+
